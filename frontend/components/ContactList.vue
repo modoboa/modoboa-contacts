@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col-sm-5">
-        <search-form></search-form>
+        <search-form @search="(query) => getContacts(query)"></search-form>
       </div>
       <div class="col-sm-7">
         <button type="button" class="btn btn-primary" @click="showContactForm = true">
@@ -59,9 +59,12 @@
          'contacts'
      ]),
      created() {
-         this.$store.dispatch('getContacts')
+         this.getContacts()
      },
      methods: {
+         getContacts(query) {
+             this.$store.dispatch('getContacts', query)
+         },
          closeContactForm() {
              this.showContactForm = false
              this.currentContactPk = null

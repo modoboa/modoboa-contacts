@@ -13,8 +13,8 @@ export const deleteContact = ({ commit }, pk) => {
     })
 }
 
-export const getContacts = ({ commit }) => {
-    return api.getContacts().then(response => {
+export const getContacts = ({ commit }, query) => {
+    return api.getContacts(query).then(response => {
         commit(types.SET_CONTACTS, { contacts: response.data })
     })
 }

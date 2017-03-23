@@ -17,8 +17,9 @@ const getContact = (pk) => {
     return resource.get({pk: pk})
 }
 
-const getContacts = () => {
-    return resource.get()
+const getContacts = (query) => {
+    var params = (query) ? { search: query } : {}
+    return resource.get(params)
 }
 
 const updateContact = (pk, data) => {

@@ -12,9 +12,11 @@ class ContactViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, ]
     permission_classes = [IsAuthenticated]
-    search_fields = ("^first_name", "^last_name", "^email")
+    search_fields = ("^first_name", "^last_name", "^emails__address")
     serializer_class = serializers.ContactSerializer
 
     def get_queryset(self):
         """Filter based on current user."""
-        return models.Contact.objects.filter(user=self.request.user)
+        qset = models.Contact.objects.filter(user=self.request.user)
+        return qset.select_related("user").prefetch_related(
+            "emails", "phone_numbers")
