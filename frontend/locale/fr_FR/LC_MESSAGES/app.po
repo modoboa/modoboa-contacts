@@ -1,0 +1,22 @@
+# French translations for modoboa-contacts package.
+# Copyright (C) 2017 THE modoboa-contacts'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the modoboa-contacts package.
+# Automatically generated, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: modoboa-contacts 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-19 13:55+0100\n"
+"PO-Revision-Date: 2017-03-19 13:54+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: frontend/App.vue:9
+msgid "Display name"
+msgstr "Nom"

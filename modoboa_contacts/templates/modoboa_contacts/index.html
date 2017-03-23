@@ -1,0 +1,20 @@
+{% extends "twocols.html" %}
+
+{% load i18n lib_tags static %}
+{% load render_bundle from webpack_loader %}
+
+{% block pagetitle %}{% trans "Contacts" %}{% endblock %}
+
+{% block extra_js %}
+  {% render_bundle 'main' 'js' 'CONTACTS' %}
+{% endblock %}
+
+{% block leftcol %}
+{% endblock %}
+
+{% block apparea %}
+
+  <div id="app">
+  </div>
+
+{% endblock %}
