@@ -29,21 +29,21 @@
          number: String,
          type: String
      },
-     data: function() {
+     data: function () {
          return {
              types: ['cellular', 'fax', 'home', 'main', 'pager', 'work', 'other'],
              phoneNumber: { number: this.number, type: this.type }
          }
      },
      watch: {
-         number() {
+         number () {
              this.phoneNumber.number = this.number
          },
-         type() {
+         type () {
              this.phoneNumber.type = this.type
          }
      },
-     updated() {
+     updated () {
          this.$emit('updated', this.phoneNumber)
      }
  }

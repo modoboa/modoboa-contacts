@@ -13,13 +13,13 @@
 
 <script>
  export default {
-     data() {
+     data () {
          return {
              query: ''
          }
      },
      methods: {
-         search() {
+         search () {
              this.$emit('search', this.query)
          }
      }

@@ -36,7 +36,6 @@
 </template>
 
 <script>
- import { mapActions } from 'vuex'
  import * as api from '../api'
  import EmailField from './EmailField.vue'
  import Modal from './Modal.vue'
@@ -48,7 +47,7 @@
          'modal': Modal,
          'phone-number-field': PhoneNumberField
      },
-     data() {
+     data () {
          return {
              contact: {
                  emails: [{}],
@@ -64,7 +63,7 @@
              default: null
          }
      },
-     created() {
+     created () {
          if (this.pk) {
              api.getContact(this.pk).then((res) => {
                  this.contact = res.data
@@ -75,27 +74,27 @@
          }
      },
      methods: {
-         close() {
+         close () {
              this.show = false
              this.contact = {}
              this.formErrors = {}
              this.$emit('close')
          },
-         onFormError(response) {
+         onFormError (response) {
              this.formErrors = response.data
              // FIXME: find a better way to do this
              if (!this.contact.phone_numbers.length) {
                  this.contact.phone_numbers.push({})
              }
          },
-         createContact() {
+         createContact () {
              this.$store.dispatch('createContact', this.contact).then((res) => {
                  this.close()
              }, this.onFormError)
          },
-         saveContact() {
-             /*var form = document.querySelector('#contactForm')
-             var data = new FormData(form)*/
+         saveContact () {
+             /* var form = document.querySelector('#contactForm')
+             var data = new FormData(form) */
 
              // FIXME: find a better way to do this
              if (!Object.keys(this.contact.phone_numbers[0]).length) {
@@ -107,25 +106,25 @@
                  this.createContact()
              }
          },
-         addEmailField() {
+         addEmailField () {
              this.contact.emails.push({})
          },
-         deleteEmailField(index) {
+         deleteEmailField (index) {
              this.contact.emails.splice(index, 1)
          },
-         setEmail(index, email) {
+         setEmail (index, email) {
              this.contact.emails.splice(index, 1, email)
          },
-         addPhoneNumberField() {
+         addPhoneNumberField () {
              this.contact.phone_numbers.push({})
          },
-         deletePhoneNumberField(index) {
+         deletePhoneNumberField (index) {
              this.contact.phone_numbers.splice(index, 1)
          },
-         setPhoneNumber(index, phoneNumber) {
+         setPhoneNumber (index, phoneNumber) {
              this.contact.phone_numbers.splice(index, 1, phoneNumber)
          },
-         updateContact() {
+         updateContact () {
              var args = [this.contact.pk, this.contact]
              this.$store.dispatch('updateContact', args).then((res) => {
                  this.close()

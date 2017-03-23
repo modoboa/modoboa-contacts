@@ -29,21 +29,21 @@
          },
          type: String
      },
-     data: function() {
+     data: function () {
          return {
              types: ['home', 'work', 'other'],
              email: { address: this.address, type: this.type }
          }
      },
      watch: {
-         address() {
+         address () {
              this.email.address = this.address
          },
-         type() {
+         type () {
              this.email.type = this.type
          }
      },
-     updated() {
+     updated () {
          this.$emit('updated', this.email)
      }
  }

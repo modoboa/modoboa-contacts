@@ -10,8 +10,8 @@ import ContactList from './components/ContactList.vue'
 Vue.use(GetTextPlugin, {translations: translations})
 Vue.use(VueRouter)
 
-let csrftoken = Cookies.get('csrftoken');
-Vue.http.headers.common['X-CSRFTOKEN'] = csrftoken;
+let csrftoken = Cookies.get('csrftoken')
+Vue.http.headers.common['X-CSRFTOKEN'] = csrftoken
 
 const routes = [
     { path: '/', name: 'contact-list', component: ContactList }
@@ -22,7 +22,7 @@ export var router = new VueRouter({
 })
 
 // eslint-disable-next-line no-new
-const app = new Vue({
+new Vue({
     el: '#app',
     render: h => h(App),
     router,

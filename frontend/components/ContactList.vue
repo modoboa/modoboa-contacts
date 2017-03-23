@@ -37,7 +37,7 @@
 </template>
 
 <script>
- import { mapActions, mapState } from 'vuex'
+ import { mapState } from 'vuex'
  import ContactForm from './ContactForm.vue'
  import SearchForm from './SearchForm.vue'
  
@@ -46,7 +46,7 @@
          'contact-form': ContactForm,
          'search-form': SearchForm
      },
-     data() {
+     data () {
          return {
              currentContactPk: null,
              showContactForm: false
@@ -58,21 +58,21 @@
      computed: mapState([
          'contacts'
      ]),
-     created() {
+     created () {
          this.getContacts()
      },
      methods: {
-         getContacts(query) {
+         getContacts (query) {
              this.$store.dispatch('getContacts', query)
          },
-         closeContactForm() {
+         closeContactForm () {
              this.showContactForm = false
              this.currentContactPk = null
          },
-         deleteContact(pk) {
+         deleteContact (pk) {
              this.$store.dispatch('deleteContact', pk)
          },
-         editContact(pk) {
+         editContact (pk) {
              this.currentContactPk = pk
              this.showContactForm = true
          }
