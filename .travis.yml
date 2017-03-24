@@ -1,8 +1,9 @@
 language: python
+cache: pip
 
 install:
   - nvm install 6.10
-  - npm install codecov
+  - pip install codecov
   - cd frontend
   - npm install
 
