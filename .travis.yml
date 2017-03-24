@@ -1,0 +1,13 @@
+language: python
+
+before_script:
+  - nvm install --lts
+
+install:
+  - npm install codecov
+
+script:
+  - cd frontend
+  - npm install
+  - npm run unit
+  - codecov
