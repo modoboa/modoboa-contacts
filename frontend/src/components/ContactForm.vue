@@ -22,9 +22,9 @@
           </div>
         </div>
 
-        <email-field v-for="(email, index) in contact.emails" :index="index" :address="email.address" :type="email.type" :errors="(formErrors.emails) ? formErrors.emails[index] : {}" @updated="(email) => setEmail(index, email)" @add="addEmailField" @delete="(index) => deleteEmailField(index)"></email-field>
+        <email-field v-for="(email, index) in contact.emails" :key="email.pk" :index="index" :address="email.address" :type="email.type" :errors="(formErrors.emails) ? formErrors.emails[index] : {}" @updated="(email) => setEmail(index, email)" @add="addEmailField" @delete="(index) => deleteEmailField(index)"></email-field>
 
-        <phone-number-field v-for="(phone_number, index) in contact.phone_numbers" :index="index" :number="phone_number.number" :type="phone_number.type" :errors="(formErrors.phone_numbers) ? formErrors.phone_numbers[index] : {}" @updated="(phone_number) => setPhoneNumber(index, phone_number)" @add="addPhoneNumberField" @delete="(index) => deletePhoneNumberField(index)"></phone-number-field>
+        <phone-number-field v-for="(phone_number, index) in contact.phone_numbers" :key="phone_number.pk" :index="index" :number="phone_number.number" :type="phone_number.type" :errors="(formErrors.phone_numbers) ? formErrors.phone_numbers[index] : {}" @updated="(phone_number) => setPhoneNumber(index, phone_number)" @add="addPhoneNumberField" @delete="(index) => deletePhoneNumberField(index)"></phone-number-field>
         <hr>
 
         <button type="button" class="btn btn-default" @click="close"><translate>Close</translate></button>

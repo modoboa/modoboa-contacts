@@ -13,7 +13,7 @@ var dev_server_addr = 'localhost';
 var dev_server_port = 8001;
 
 module.exports = {
-    entry: ['./frontend/main.js'],
+    entry: ['./src/main.js'],
     output: {
         path: path.resolve(__dirname, '.' + dist_dir + '/'),
         filename: '[name]-[hash].js',
