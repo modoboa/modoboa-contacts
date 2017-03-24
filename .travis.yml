@@ -7,6 +7,5 @@ install:
   - npm install
 
 script:
-  - cd frontend
   - npm run unit
   - codecov
