@@ -1,8 +1,5 @@
 language: python
 
-before_script:
-  - nvm install --lts
-
 install:
   - npm install codecov
 
