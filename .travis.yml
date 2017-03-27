@@ -36,5 +36,7 @@ script:
   - coverage run --source ../modoboa_contacts manage.py test modoboa_contacts
 
 after_success:
-  - cd ..
+  - cd ../frontend
+  - codecov
+  - cd ../test_project
   - codecov
