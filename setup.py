@@ -4,7 +4,7 @@ import re
 import os
 from setuptools import setup, find_packages
 
-from modoboa_webmail import __version__
+from modoboa_contacts import __version__
 
 ROOT = os.path.dirname(__file__)
 
