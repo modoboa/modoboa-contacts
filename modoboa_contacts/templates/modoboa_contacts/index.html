@@ -1,4 +1,4 @@
-{% extends "twocols.html" %}
+{% extends "fluid.html" %}
 
 {% load i18n lib_tags static %}
 {% load render_bundle from webpack_loader %}
@@ -9,10 +9,7 @@
   {% render_bundle 'main' 'js' 'CONTACTS' %}
 {% endblock %}
 
-{% block leftcol %}
-{% endblock %}
-
-{% block apparea %}
+{% block container_content %}
 
   <div id="app">
   </div>

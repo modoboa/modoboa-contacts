@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import store from './store'
 import App from './App.vue'
 import translations from './translations.json'
+import ContactDetail from './components/ContactDetail.vue'
 import ContactList from './components/ContactList.vue'
 
 Vue.use(GetTextPlugin, {translations: translations})
@@ -14,11 +15,14 @@ let csrftoken = Cookies.get('csrftoken')
 Vue.http.headers.common['X-CSRFTOKEN'] = csrftoken
 
 const routes = [
-    { path: '/', name: 'contact-list', component: ContactList }
+    { path: '/', name: 'contact-list', component: ContactList },
+    { path: '/:category(\\w+)/', name: 'contact-list-filtered', component: ContactList },
+    { path: '/:pk(\\d+)/', name: 'contact-detail', component: ContactDetail }
 ]
 
 export var router = new VueRouter({
-    routes
+    routes,
+    linkActiveClass: 'active'
 })
 
 // eslint-disable-next-line no-new

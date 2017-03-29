@@ -2,14 +2,18 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import * as actions from './actions'
-import * as getters from './getters'
-import { state, mutations } from './mutations'
+import categories from './modules/categories'
+import detail from './modules/detail'
+import list from './modules/list'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    state,
     actions,
-    getters,
-    mutations
+    modules: {
+        categories,
+        detail,
+        list
+    },
+    strict: process.env.NODE_ENV !== 'production'
 })

@@ -3,27 +3,54 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 
-var resource = Vue.resource('/api/v1/contacts{/pk}/')
+var categoryResource = Vue.resource('/api/v1/categories{/pk}/')
+var contactResource = Vue.resource('/api/v1/contacts{/pk}/')
 
+// categories API
+const createCategory = (data) => {
+    return categoryResource.save(data)
+}
+
+const getCategories = () => {
+    return categoryResource.get()
+}
+
+// contacts API
 const createContact = (data) => {
-    return resource.save(data)
+    return contactResource.save(data)
 }
 
 const deleteContact = (pk) => {
-    return resource.delete({pk: pk})
+    return contactResource.delete({pk: pk})
 }
 
 const getContact = (pk) => {
-    return resource.get({pk: pk})
+    return contactResource.get({pk: pk})
 }
 
-const getContacts = (query) => {
-    var params = (query) ? { search: query } : {}
-    return resource.get(params)
+const getContacts = ({ query, category }) => {
+    var params = {}
+
+    if (query !== undefined) {
+        params.search = query
+    }
+    if (category !== undefined) {
+        params.category = category
+    }
+    return contactResource.get(params)
 }
 
 const updateContact = (pk, data) => {
-    return resource.update({pk: pk}, data)
+    return contactResource.update({pk: pk}, data)
 }
 
-export { createContact, deleteContact, getContact, getContacts, updateContact }
+export {
+    createCategory,
+    getCategories,
+
+    createContact,
+    deleteContact,
+    getContact,
+    getContacts,
+    updateContact
+}

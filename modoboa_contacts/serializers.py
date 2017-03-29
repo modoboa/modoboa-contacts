@@ -21,6 +21,19 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
         fields = ("pk", "number", "type")
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    """Serializer for Category."""
+
+    class Meta:
+        model = models.Category
+        fields = ("pk", "name")
+
+    def create(self, validated_data):
+        """Use current user."""
+        user = self.context["request"].user
+        return models.Category.objects.create(user=user, **validated_data)
+
+
 class ContactSerializer(serializers.ModelSerializer):
     """Contact serializer."""
 
@@ -30,7 +43,8 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Contact
         fields = (
-            "pk", "first_name", "last_name", "emails", "phone_numbers")
+            "pk", "first_name", "last_name", "categories", "emails",
+            "phone_numbers")
 
     def create(self, validated_data):
         """Use current user."""

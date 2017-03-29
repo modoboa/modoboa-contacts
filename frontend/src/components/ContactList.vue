@@ -20,50 +20,60 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="contact in contacts">
-          <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+        <tr v-for="(contact, index) in contacts" :key="contact.pk">
+          <td><router-link :to="{ name: 'contact-detail', params: { pk: contact.pk } }">{{ contact.first_name }} {{ contact.last_name }}</router-link></td>
           <td>{{ contact.emails[0].address }}</td>
           <td v-if="contact.phone_numbers.length">{{ contact.phone_numbers[0].number }}</td>
           <td v-else></td>
           <td class="text-right">
-            <button type="button" @click="editContact(contact.pk)" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-edit"></span></button>
-            <button type="button" @click="deleteContact(contact.pk)" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button>
+            <button type="button" @click="editContactCategories(index)" class="btn btn-default btn-xs"><span class="fa fa-tag"></span></button>
+            <button type="button" @click="editContact(contact.pk)" class="btn btn-primary btn-xs"><span class="fa fa-edit"></span></button>
+            <button type="button" @click="deleteContact(contact.pk)" class="btn btn-danger btn-xs"><span class="fa fa-trash"></span></button>
           </td>
         </tr>
       </tbody>
     </table>
+    <contact-categories-form :index="contactIndex" v-if="showContactCategoriesForm" @close="closeContactCategoriesForm"></contact-categories-form>
     <contact-form :pk="currentContactPk" v-if="showContactForm" @close="closeContactForm"></contact-form>
   </div>
 </template>
 
 <script>
- import { mapState } from 'vuex'
+ import { mapGetters } from 'vuex'
+ import ContactCategoriesForm from './ContactCategoriesForm.vue'
  import ContactForm from './ContactForm.vue'
  import SearchForm from './SearchForm.vue'
  
  export default {
      components: {
+         'contact-categories-form': ContactCategoriesForm,
          'contact-form': ContactForm,
          'search-form': SearchForm
      },
      data () {
          return {
              currentContactPk: null,
-             showContactForm: false
+             contactIndex: null,
+             showContactForm: false,
+             showContactCategoriesForm: false
          }
      },
      props: {
          pk: null
      },
-     computed: mapState([
+     computed: mapGetters([
          'contacts'
      ]),
      created () {
-         this.getContacts()
+         this.getContacts(this.$route.params)
      },
      methods: {
-         getContacts (query) {
-             this.$store.dispatch('getContacts', query)
+         getContacts ({ query, category }) {
+             this.$store.dispatch('getContacts', [query, category])
+         },
+         closeContactCategoriesForm () {
+             this.showContactCategoriesForm = false
+             this.contactIndex = null
          },
          closeContactForm () {
              this.showContactForm = false
@@ -75,6 +85,15 @@
          editContact (pk) {
              this.currentContactPk = pk
              this.showContactForm = true
+         },
+         editContactCategories (index) {
+             this.contactIndex = index
+             this.showContactCategoriesForm = true
+         }
+     },
+     watch: {
+         '$route' (to, from) {
+             this.getContacts(this.$route.params)
          }
      }
  }

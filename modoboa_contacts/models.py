@@ -9,12 +9,21 @@ from phonenumber_field.modelfields import PhoneNumberField
 from . import constants
 
 
+class Category(models.Model):
+    """A category for contacts."""
+
+    user = models.ForeignKey("core.User")
+    name = models.CharField(max_length=50)
+
+
 class Contact(models.Model):
     """A contact."""
 
     user = models.ForeignKey("core.User")
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+
+    categories = models.ManyToManyField(Category, blank=True)
 
 
 class EmailAddress(models.Model):
