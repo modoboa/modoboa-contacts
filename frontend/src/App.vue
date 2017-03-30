@@ -25,7 +25,6 @@
 
 <script>
  import { mapGetters } from 'vuex'
- import * as api from './api'
  import CategoryForm from './components/CategoryForm.vue'
 
  export default {

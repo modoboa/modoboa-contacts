@@ -50,7 +50,6 @@
 
 <script>
  import { mapGetters } from 'vuex'
- import * as api from '../api'
  import ContactForm from './ContactForm.vue'
 
  export default {

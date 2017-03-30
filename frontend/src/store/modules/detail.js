@@ -13,7 +13,7 @@ const getters = {
 
 // actions
 const actions = {
-    getContact ({ commit }, pk ) {
+    getContact ({ commit }, pk) {
         return api.getContact(pk).then(response => {
             commit(types.SET_CONTACT, { contact: response.data })
         })
