@@ -6,7 +6,7 @@
     
     <div slot="body">
       <form id="categoriesForm" class="form-horizontal" method="post" v-on:submit.prevent="saveCategories()">
-        <div v-for="category in categories" class="form-group">
+        <div v-for="category in categories" :key="category.pk" class="form-group">
           <div class="col-sm-offset-1 col-sm-11">
             <div class="checkbox">
               <label>

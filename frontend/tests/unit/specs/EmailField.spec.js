@@ -24,7 +24,7 @@ describe('EmailField.vue', () => {
         let spy = sinon.spy()
         vm.$on('updated', spy)
         vm.email.type = 'work'
-        Vue.nextTick(() => {
+        Vue.nextTick().then(() => {
             expect(spy).to.have.been.calledWith({ address: 'test@toto.com', type: 'work' })
         })
     })
