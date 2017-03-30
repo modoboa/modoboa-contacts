@@ -49,6 +49,7 @@ class ContactSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Use current user."""
         user = self.context["request"].user
+        categories = validated_data.pop("categories", [])
         emails = validated_data.pop("emails")
         phone_numbers = validated_data.pop("phone_numbers", [])
         contact = models.Contact.objects.create(user=user, **validated_data)
@@ -62,6 +63,10 @@ class ContactSerializer(serializers.ModelSerializer):
                 models.PhoneNumber(contact=contact, **phone_number))
         if to_create:
             models.PhoneNumber.objects.bulk_create(to_create)
+        if categories:
+            qset = models.Categories.objects.filter(pk__in=categories)
+            for category in qset:
+                contact.categories.add(category)
         return contact
 
     def update(self, instance, validated_data):
