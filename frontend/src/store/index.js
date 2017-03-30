@@ -8,7 +8,7 @@ import list from './modules/list'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const options = {
     actions,
     modules: {
         categories,
@@ -16,4 +16,7 @@ export default new Vuex.Store({
         list
     },
     strict: process.env.NODE_ENV !== 'production'
-})
+}
+
+export default new Vuex.Store(options)
+export { options }
