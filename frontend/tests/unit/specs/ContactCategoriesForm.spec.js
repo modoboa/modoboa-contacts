@@ -5,9 +5,9 @@ import translations from '@/translations.json'
 
 import ContactCategoriesForm from '@/components/ContactCategoriesForm.vue'
 import categories from '@/store/modules/categories'
+import list from '@/store/modules/list'
 
 describe('ContactCategoriesForm.vue', () => {
-    let state
     let store
 
     beforeEach(() => {
@@ -15,8 +15,9 @@ describe('ContactCategoriesForm.vue', () => {
         const actions = actionsInjector({
             '../api': {
                 updateContact (pk, data) {
-                    return new Promise((resolve, reject) => {
-                        const contact = {
+                    return Promise.resolve({
+                        data: {
+                            pk: 1,
                             'first_name': 'Homer',
                             'last_name': 'Simpson',
                             emails: [{
@@ -25,7 +26,6 @@ describe('ContactCategoriesForm.vue', () => {
                             }],
                             categories: [1, 2]
                         }
-                        return resolve(contact)
                     })
                 }
             }
@@ -33,33 +33,37 @@ describe('ContactCategoriesForm.vue', () => {
         GetTextPlugin.installed = false
         Vue.use(GetTextPlugin, {translations: translations})
 
-        state = {
-            categories: {
-                categories: [{
-                    pk: 1,
-                    name: 'Test 1'
-                }, {
-                    pk: 2,
-                    name: 'Test 2'
-                }]
-            },
-            list: {
-                contacts: [{
-                    'first_name': 'Homer',
-                    'last_name': 'Simpson',
-                    emails: [{
-                        address: 'homer@simpson.com',
-                        type: 'home'
-                    }],
-                    categories: [1]
-                }]
-            }
-        }
-
         store = new Vuex.Store({
-            state,
-            getters: categories.getters,
-            actions
+            actions,
+            modules: {
+                categories: {
+                    state: {
+                        categories: [{
+                            pk: 1,
+                            name: 'Test 1'
+                        }, {
+                            pk: 2,
+                            name: 'Test 2'
+                        }]
+                    },
+                    getters: categories.getters
+                },
+                list: {
+                    mutations: list.mutations,
+                    state: {
+                        contacts: [{
+                            'pk': 1,
+                            'first_name': 'Homer',
+                            'last_name': 'Simpson',
+                            emails: [{
+                                address: 'homer@simpson.com',
+                                type: 'home'
+                            }],
+                            categories: [1]
+                        }]
+                    }
+                }
+            }
         })
     })
 
@@ -73,7 +77,7 @@ describe('ContactCategoriesForm.vue', () => {
         })
     })
 
-    it('should update contact categories', () => {
+    it('should update contact categories', (done) => {
         const Ctor = Vue.extend({ ...ContactCategoriesForm, store })
         const vm = new Ctor({ propsData: { index: 0 } }).$mount()
 
@@ -81,8 +85,9 @@ describe('ContactCategoriesForm.vue', () => {
         const form = vm.$el.querySelector('#categoriesForm')
         form.dispatchEvent(new Event('submit'))
         Vue.nextTick().then(() => {
-            expect(state.contacts[0].categories).equal.deep.to([1, 2])
-        })
+            expect(store.state.list.contacts[0].categories).to.deep.equal([1, 2])
+            done()
+        }).catch(done)
     })
 })
 
