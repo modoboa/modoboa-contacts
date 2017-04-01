@@ -11,7 +11,7 @@ describe('PhoneNumberField.vue', () => {
         expect(vm.$el).to.be.ok
     })
 
-    it('should render correct content with data', () => {
+    it('should render correct content with data', done => {
         const Ctor = Vue.extend(PhoneNumberField)
         const vm = new Ctor({
             propsData: {
@@ -26,6 +26,7 @@ describe('PhoneNumberField.vue', () => {
         vm.phoneNumber.type = 'pager'
         Vue.nextTick(() => {
             expect(spy).to.have.been.calledWith({ number: '0123456789', type: 'pager' })
+            done()
         })
     })
 })

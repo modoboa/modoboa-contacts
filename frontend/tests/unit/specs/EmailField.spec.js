@@ -11,7 +11,7 @@ describe('EmailField.vue', () => {
         expect(vm.$el).to.be.ok
     })
 
-    it('should render correct content with data', () => {
+    it('should render correct content with data', done => {
         const Ctor = Vue.extend(EmailField)
         const vm = new Ctor({
             propsData: {
@@ -20,12 +20,12 @@ describe('EmailField.vue', () => {
         }).$mount()
         expect(vm.$el).to.be.ok
         assert.equal(vm.email.address, 'test@toto.com')
-
         let spy = sinon.spy()
         vm.$on('updated', spy)
         vm.email.type = 'work'
-        Vue.nextTick().then(() => {
-            expect(spy).to.have.been.calledWith({ address: 'test@toto.com', type: 'work' })
+        Vue.nextTick(() => {
+            assert(spy.calledWith({ address: 'test@toto.com', type: 'work' }))
+            done()
         })
     })
 })
