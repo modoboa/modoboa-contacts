@@ -5,7 +5,7 @@
   "author": "Antoine Nguyen <tonio@ngyn.org>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node server.js",
+    "dev": "cross-env NODE_ENV=development node build/dev-server.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start tests/unit/karma.conf.js --single-run",
     "test": "npm run unit",
@@ -13,11 +13,12 @@
   },
   "dependencies": {
     "js-cookie": "^2.1.3",
-    "karma-es6-shim": "^1.0.0",
-    "vue": "^2.2.6",
+    "moment": "^2.18.1",
+    "vue": "^2.2.2",
     "vue-gettext": "^2.0.10",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.2.0",
+    "vuejs-datepicker": "^0.6.5",
     "vuex": "^2.2.1"
   },
   "devDependencies": {
@@ -54,6 +55,7 @@
     "inject-loader": "^2.0.1",
     "karma": "^1.4.1",
     "karma-coverage": "^1.1.1",
+    "karma-es6-shim": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-sinon-chai": "^1.2.4",
@@ -76,6 +78,7 @@
     "vue-template-compiler": "^2.2.6",
     "webpack": "^2.2.1",
     "webpack-bundle-analyzer": "^2.2.1",
+    "webpack-bundle-tracker": "^0.2.0",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
     "webpack-merge": "^2.6.1"

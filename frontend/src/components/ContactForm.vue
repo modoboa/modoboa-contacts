@@ -21,15 +21,76 @@
             <span v-if="formErrors['last_name']" class="help-block">{{ formErrors['last_name'][0] }}</span>
           </div>
         </div>
+        <div class="form-group" :class="{ 'has-error': formErrors['company'] || formErrors['position'] }">
+          <label class="col-sm-1 control-label" for="company">
+            <span class="fa fa-building"></span></label>
+          <div class="col-sm-6">
+            <input v-model="contact.company" type="text" id="company" name="company" class="form-control" placeholder="Company">
+            <span v-if="formErrors['company']" class="help-block">{{ formErrors['company'][0] }}</span>
+          </div>
+          <div class="col-sm-5">
+            <input v-model="contact.position" type="text" id="position" name="position" class="form-control" placeholder="Position">
+            <span v-if="formErrors['position']" class="help-block">{{ formErrors['position'][0] }}</span>
+          </div>
+        </div>
 
-        <email-field v-for="(email, index) in contact.emails" :key="email.pk" :index="index" :address="email.address" :type="email.type" :errors="(formErrors.emails) ? formErrors.emails[index] : {}" @updated="(email) => setEmail(index, email)" @add="addEmailField" @delete="(index) => deleteEmailField(index)"></email-field>
+        <email-field v-for="(email, index) in contact.emails" :key="index" :index="index" :email="email" :errors="(formErrors.emails) ? formErrors.emails[index] : {}" @add="addEmailField" @delete="(index) => deleteEmailField(index)"></email-field>
 
-        <phone-number-field v-for="(phone_number, index) in contact.phone_numbers" :key="phone_number.pk" :index="index" :number="phone_number.number" :type="phone_number.type" :errors="(formErrors.phone_numbers) ? formErrors.phone_numbers[index] : {}" @updated="(phone_number) => setPhoneNumber(index, phone_number)" @add="addPhoneNumberField" @delete="(index) => deletePhoneNumberField(index)"></phone-number-field>
+        <phone-number-field v-for="(phone_number, index) in contact.phone_numbers" :key="index" :index="index" :phone="phone_number" :errors="(formErrors.phone_numbers) ? formErrors.phone_numbers[index] : {}" @add="addPhoneNumberField" @delete="(index) => deletePhoneNumberField(index)"></phone-number-field>
+
+        <div v-if="showMore">
+          <div class="form-group" :class="{ 'has-error': formErrors['birth_date'] }">
+            <label class="col-sm-1 control-label" for="birth_date">
+              <span class="fa fa-calendar"></span></label>
+            <div class="col-sm-6">
+              <datepicker v-model="contact.birth_date" id="birth_date" name="birth_date" inputClass="form-control" placeholder="Birth date"></datepicker>
+              <span v-if="formErrors['birth_date']" class="help-block">{{ formErrors['birth_date'][0] }}</span>
+            </div>
+          </div>
+          <div class="form-group" :class="{ 'has-error': formErrors['address'] }">
+            <label class="col-sm-1 control-label" for="address">
+              <span class="fa fa-map-marker"></span></label>
+            <div class="col-sm-11">
+              <input v-model="contact.address" type="text" id="address" name="address" class="form-control" placeholder="Address">
+              <span v-if="formErrors['address']" class="help-block">{{ formErrors['address'][0] }}</span>
+            </div>
+          </div>
+          <div class="form-group" :class="{ 'has-error': formErrors['zipcode'] || formErrors['city'] }">
+            <div class="col-sm-offset-1 col-sm-4">
+              <input v-model="contact.zipcode" type="text" id="zipcode" name="zipcode" class="form-control" placeholder="Zip Code">
+              <span v-if="formErrors['zipcode']" class="help-block">{{ formErrors['zipcode'][0] }}</span>
+            </div>
+            <div class="col-sm-7">
+              <input v-model="contact.city" type="text" id="city" name="city" class="form-control" placeholder="City">
+              <span v-if="formErrors['city']" class="help-block">{{ formErrors['city'][0] }}</span>
+            </div>
+          </div>
+          <div class="form-group" :class="{ 'has-error': formErrors['country'] || formErrors['state'] }">
+            <div class="col-sm-offset-1 col-sm-6">
+              <input v-model="contact.country" type="text" id="country" name="country" class="form-control" placeholder="Country">
+              <span v-if="formErrors['country']" class="help-block">{{ formErrors['country'][0] }}</span>
+            </div>
+            <div class="col-sm-5">
+              <input v-model="contact.state" type="text" id="state" name="state" class="form-control" placeholder="State/Province">
+              <span v-if="formErrors['state']" class="help-block">{{ formErrors['state'][0] }}</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-1 control-label" for="address">
+              <span class="fa fa-sticky-note"></span></label>
+            <div class="col-sm-11">
+              <textarea v-model="contact.note" id="note" name="note" class="form-control" placeholder="Note"></textarea>
+            </div>
+          </div>
+        </div>
+
         <hr>
-
-        <button type="button" class="btn btn-default" @click="close"><translate>Close</translate></button>
-        <input type="submit" class="btn btn-primary" value="Save">
-
+        <button type="button" class="btn btn-default" @click="showMore = true"><translate>More</translate></button>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" @click="close"><translate>Close</translate></button>
+          <input type="submit" class="btn btn-primary" value="Save">
+        </div>
+        <div class="clearfix"></div>
       </form>
     </div>
   </modal>
@@ -37,12 +98,14 @@
 
 <script>
  import * as api from '../api'
+ import Datepicker from 'vuejs-datepicker'
  import EmailField from './EmailField.vue'
  import Modal from './Modal.vue'
  import PhoneNumberField from './PhoneNumberField.vue'
  
  export default {
      components: {
+         'datepicker': Datepicker,
          'email-field': EmailField,
          'modal': Modal,
          'phone-number-field': PhoneNumberField
@@ -54,7 +117,8 @@
                  phone_numbers: [{}]
              },
              formErrors: {},
-             show: true
+             show: true,
+             showMore: false
          }
      },
      props: {
@@ -70,6 +134,9 @@
                  if (this.contact.phone_numbers.length === 0) {
                      this.contact.phone_numbers.push({})
                  }
+                 if (this.contact.address !== '') {
+                     this.showMore = true
+                 }
              })
          }
      },
@@ -82,28 +149,27 @@
          },
          onFormError (response) {
              this.formErrors = response.data
-             // FIXME: find a better way to do this
-             if (!this.contact.phone_numbers.length) {
-                 this.contact.phone_numbers.push({})
-             }
          },
-         createContact () {
-             this.$store.dispatch('createContact', this.contact).then((res) => {
+         createContact (contact) {
+             this.$store.dispatch('createContact', contact).then((res) => {
                  this.close()
              }, this.onFormError)
          },
          saveContact () {
+             var contact = JSON.parse(JSON.stringify(this.contact))
              /* var form = document.querySelector('#contactForm')
              var data = new FormData(form) */
 
-             // FIXME: find a better way to do this
-             if (!Object.keys(this.contact.phone_numbers[0]).length) {
-                 this.contact.phone_numbers.splice(0, 1)
+             if (!Object.keys(contact.phone_numbers[0]).length) {
+                 contact.phone_numbers.splice(0, 1)
+             }
+             if (contact.birth_date) {
+                 contact.birth_date = contact.birth_date.split('T')[0]
              }
              if (this.pk !== null) {
-                 this.updateContact()
+                 this.updateContact(contact)
              } else {
-                 this.createContact()
+                 this.createContact(contact)
              }
          },
          addEmailField () {
@@ -124,8 +190,8 @@
          setPhoneNumber (index, phoneNumber) {
              this.contact.phone_numbers.splice(index, 1, phoneNumber)
          },
-         updateContact () {
-             var args = [this.contact.pk, this.contact]
+         updateContact (contact) {
+             var args = [contact.pk, contact]
              this.$store.dispatch('updateContact', args).then((res) => {
                  this.close()
              }, this.onFormError)

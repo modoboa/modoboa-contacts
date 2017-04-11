@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group" :class="{ 'has-error': errors.address || errors.type }"">
+  <div class="form-group" :class="{ 'has-error': errors.address || errors.type }">
     <label for="address" class="col-sm-1 control-label"><span class="fa fa-envelope"></span></label>
     <div class="col-sm-6">
       <input v-model="email.address" type="email" id="address" name="address" class="form-control" placeholder="Address">
@@ -21,30 +21,17 @@
 <script>
  export default {
      props: {
-         address: String,
+         email: Object,
          errors: Object,
          index: {
              type: Number,
              required: true
-         },
-         type: String
+         }
      },
      data: function () {
          return {
-             types: ['home', 'work', 'other'],
-             email: { address: this.address, type: this.type }
+             types: ['home', 'work', 'other']
          }
-     },
-     watch: {
-         address () {
-             this.email.address = this.address
-         },
-         type () {
-             this.email.type = this.type
-         }
-     },
-     updated () {
-         this.$emit('updated', this.email)
      }
  }
 </script>

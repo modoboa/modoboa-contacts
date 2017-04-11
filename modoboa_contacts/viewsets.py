@@ -12,8 +12,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """Category ViewSet."""
 
     permission_classes = [IsAuthenticated]
-    queryset = models.Category.objects.all()
     serializer_class = serializers.CategorySerializer
+
+    def get_queryset(self):
+        """Filter based on current user."""
+        qset = models.Category.objects.filter(user=self.request.user)
+        return qset.select_related("user")
 
 
 class ContactFilter(django_filters.rest_framework.FilterSet):

@@ -44,7 +44,10 @@ class ContactSerializer(serializers.ModelSerializer):
         model = models.Contact
         fields = (
             "pk", "first_name", "last_name", "categories", "emails",
-            "phone_numbers")
+            "phone_numbers", "company", "position",
+            "address", "zipcode", "city", "country", "state",
+            "note", "birth_date"
+        )
 
     def create(self, validated_data):
         """Use current user."""

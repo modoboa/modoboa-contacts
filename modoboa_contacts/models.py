@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from phonenumber_field.modelfields import PhoneNumberField
-
 from . import constants
 
 
@@ -22,6 +20,18 @@ class Contact(models.Model):
     user = models.ForeignKey("core.User")
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    birth_date = models.DateField(null=True)
+
+    company = models.CharField(max_length=100, blank=True)
+    position = models.CharField(max_length=200, blank=True)
+
+    address = models.CharField(max_length=200, blank=True)
+    zipcode = models.CharField(max_length=15, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+
+    note = models.TextField(blank=True)
 
     categories = models.ManyToManyField(Category, blank=True)
 
@@ -39,6 +49,6 @@ class PhoneNumber(models.Model):
     """A phone number."""
 
     contact = models.ForeignKey(Contact, related_name="phone_numbers")
-    number = PhoneNumberField()
+    number = models.CharField(max_length=40)
     type = models.CharField(
         max_length=20, choices=constants.PHONE_TYPES)

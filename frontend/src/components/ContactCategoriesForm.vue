@@ -16,8 +16,11 @@
           </div>
         </div>
         <hr>
-        <button type="button" class="btn btn-default" @click="close"><translate>Close</translate></button>
-        <input type="submit" class="btn btn-primary" value="Apply">
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" @click="close"><translate>Close</translate></button>
+          <input type="submit" class="btn btn-primary" value="Apply">
+        </div>
+        <div class="clearfix"></div>
       </form>
     </div>
   </modal>

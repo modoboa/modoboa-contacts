@@ -5,8 +5,20 @@
 
 {% block pagetitle %}{% trans "Contacts" %}{% endblock %}
 
+{% block extra_css %}
+  {% if not debug %}
+    {% render_bundle 'app' 'css' 'CONTACTS' %}
+  {% endif %}
+{% endblock %}
+
 {% block extra_js %}
-  {% render_bundle 'main' 'js' 'CONTACTS' %}
+  {% if not debug %}
+    {% render_bundle 'manifest' 'js' 'CONTACTS' %}
+    {% render_bundle 'vendor' 'js' 'CONTACTS' %}
+    {% render_bundle 'app' 'js' 'CONTACTS' %}
+  {% else %}
+    {% render_bundle 'app' 'js' 'CONTACTS' %}
+  {% endif %}
 {% endblock %}
 
 {% block container_content %}

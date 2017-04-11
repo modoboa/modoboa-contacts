@@ -3,7 +3,7 @@
     <div id="leftcol" class="sidebar collapse navbar-collapse">
       <ul class="nav nav-sidebar" role="menu">
         <router-link tag="li" :to="{ name: 'contact-list' }" exact>
-          <a><span class="fa fa-vcard"></span> <translate>Contacts</translate></a>
+          <a><span class="fa fa-address-book"></span> <translate>Contacts</translate></a>
         </router-link>
         <li class="nav-header"><translate>Categories</translate></li>
         <router-link v-for="category in categories" :key="category.pk" tag="li" :to="{ name: 'contact-list-filtered', params: { category: category.name } }">
@@ -36,6 +36,7 @@
      ]),
      created () {
          this.$store.dispatch('getCategories')
+         this.$language.current = 'fr_FR'
      },
      data () {
          return {

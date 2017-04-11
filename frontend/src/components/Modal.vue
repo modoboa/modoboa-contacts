@@ -1,17 +1,15 @@
 <template>
-  <div class="modal-mask" v-show="show" transition="modal">
-    <div class="modal" style="display: block">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <slot name="header"></slot>
-          </div>
-          <div class="modal-body">
-            <slot name="body"></slot>
-          </div>
-          <div v-if="showFooter" class="modal-footer">
-            <slot name="footer"></slot>
-          </div>
+  <div ref="modal" class="modal fade show in background-darken" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <slot name="header"></slot>
+        </div>
+        <div class="modal-body">
+          <slot name="body"></slot>
+        </div>
+        <div v-if="showFooter" class="modal-footer">
+          <slot name="footer"></slot>
         </div>
       </div>
     </div>
@@ -35,15 +33,8 @@
 </script>
 
 <style scoped>
- .modal-mask {
-     position: fixed;
-     z-index: 9998;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background-color: rgba(0, 0, 0, .5);
-     display: table;
-     transition: opacity .3s ease;
+ .background-darken {
+     background: rgba(0, 0, 0, 0.5);
+     overflow-y: auto;
  }
 </style>
