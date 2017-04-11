@@ -46,7 +46,6 @@ INSTALLED_APPS = (
     'reversion',
     'ckeditor',
     'ckeditor_uploader',
-    'phonenumber_field',
     'rest_framework',
     'rest_framework.authtoken',
 )
