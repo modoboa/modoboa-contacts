@@ -22,6 +22,10 @@ class CategoryViewSetTestCase(ModoAPITestCase):
         cls.user = core_models.User.objects.get(username="user@test.com")
         cls.category = factories.CategoryFactory(user=cls.user, name="Family")
 
+    def setUp(self):
+        """Initiate test context."""
+        self.client.force_login(self.user)
+
     def test_get_categories(self):
         """Check category list endpoint."""
         url = reverse("api:category-list")
