@@ -18,7 +18,7 @@
     "vue-gettext": "^2.0.10",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.2.0",
-    "vuejs-datepicker": "^0.6.5",
+    "vuejs-datepicker": "^0.7.0",
     "vuex": "^2.2.1"
   },
   "devDependencies": {

@@ -26,7 +26,7 @@
                 <td><span class="fa fa-calendar"></span></td>
                 <td colspan="2">{{ contact.birth_date|formatDate }}</td>
               </tr>
-              <tr v-if="contact.categories.length">
+              <tr v-if="contact.categories">
                 <td><span class="fa fa-tag"></span></td>
                 <td colspan="2"><span v-for="category in contact.categories" class="label label-success">{{ getCategory(category).name }}</span></td>
               </tr>
