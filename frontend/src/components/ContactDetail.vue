@@ -31,12 +31,12 @@
                 <td colspan="2"><span v-for="category in contact.categories" class="label label-success">{{ getCategory(category).name }}</span></td>
               </tr>
               <tr v-for="(email, index) in contact.emails">
-                <td v-if="index === 0"><span class="fa fa-envelope"></span></td>
+                <td><span v-if="index === 0" class="fa fa-envelope"></span></td>
                 <td>{{ email.address }}</td>
                 <td><span class="label label-info">{{ email.type }}</span></td>
               </tr>
               <tr v-for="(phone, index) in contact.phone_numbers">
-                <td v-if="index === 0"><span class="fa fa-phone"></span></td>
+                <td><span v-if="index === 0" class="fa fa-phone"></span></td>
                 <td>{{ phone.number }}</td>
                 <td><span class="label label-info">{{ phone.type }}</span></td>
               </tr>
