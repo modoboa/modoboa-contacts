@@ -2,7 +2,7 @@
   <div class="form-group" :class="{ 'has-error': errors.number || errors.type }">
     <label for="number" class="col-sm-1 control-label"><span class="fa fa-phone"></span></label>
     <div class="col-sm-6">
-      <input v-model="phone.number" type="text" id="number" name="number" class="form-control" placeholder="Phone number">
+      <input v-model="phone.number" type="text" id="number" name="number" class="form-control" :placeholder="phoneNumberPlaceholder">
       <span v-if="errors.number" class="help-block">{{ errors.number[0] }}</span>
     </div>
     <div class="col-sm-3">
@@ -31,6 +31,11 @@
      data: function () {
          return {
              types: ['cellular', 'fax', 'home', 'main', 'pager', 'work', 'other']
+         }
+     },
+     computed: {
+         phoneNumberPlaceholder () {
+             return this.$gettext('Phone number')
          }
      }
  }

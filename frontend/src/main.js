@@ -12,8 +12,11 @@ import ContactDetail from './components/ContactDetail.vue'
 import ContactList from './components/ContactList.vue'
 
 Vue.use(GetTextPlugin, {
-    translations: translations,
-    defaultLanguage: 'fr_FR'
+    availableLanguages: {
+        en: 'English',
+        fr: 'Français'
+    },
+    translations: translations
 })
 Vue.use(VueRouter)
 
@@ -44,3 +47,6 @@ new Vue({
     router,
     store
 })
+
+/* global userLang */
+Vue.config.language = userLang

@@ -7,7 +7,7 @@
       <form id="categoryForm" class="form-horizontal" method="post" v-on:submit.prevent="createCategory">
         <div class="form-group" :class="{ 'has-error': formErrors['name'] }">
           <div class="col-sm-7">
-            <input v-model="category.name" type="text" id="name" name="name" class="form-control" placeholder="Name">
+            <input v-model="category.name" type="text" id="name" name="name" class="form-control" :placeholder="namePlaceholder">
             <span v-if="formErrors['name']" class="help-block">{{ formErrors['name'][0] }}</span>
           </div>
         </div>
@@ -33,6 +33,11 @@
          return {
              category: {},
              formErrors: {}
+         }
+     },
+     computed: {
+         namePlaceholder () {
+             return this.$gettext('Name')
          }
      },
      methods: {
