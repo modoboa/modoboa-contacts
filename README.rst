@@ -59,6 +59,22 @@ Finally, run the following commands to setup the database tables::
   $ python manage.py collectstatic
   $ python manage.py load_initial_data
 
+For developpers
+---------------
+
+The frontend part of this plugin is developed with `VueJS 2 <https://vuejs.org/>`_ and
+requires `nodejs <https://nodejs.org/en/>`_ and `webpack <https://webpack.js.org/>`_.
+
+Once nodejs is installed on your system, run the following commands::
+
+  $ cd frontend
+  $ npm install
+  $ npm run dev
+
+To update dist files (the ones that will be distributed with the plugin), run::
+
+  $ npm run build
+
 .. |travis| image:: https://travis-ci.org/modoboa/modoboa-contacts.svg?branch=master
     :target: https://travis-ci.org/modoboa/modoboa-contacts
 
