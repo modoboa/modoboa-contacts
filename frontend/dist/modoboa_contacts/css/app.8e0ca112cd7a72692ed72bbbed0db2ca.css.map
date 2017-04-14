@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/components/Modal.vue"],"names":[],"mappings":"AACA,oCACI,0BACA,eAAiB","file":"modoboa_contacts/css/app.8e0ca112cd7a72692ed72bbbed0db2ca.css","sourcesContent":["\n.background-darken[data-v-5da49344] {\n    background: rgba(0, 0, 0, 0.5);\n    overflow-y: auto;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/components/Modal.vue"],"sourceRoot":""}

@@ -10,7 +10,7 @@ __pycache__/
 env/
 ./build/
 develop-eggs/
-dist/
+/dist/
 downloads/
 eggs/
 lib64/
@@ -55,6 +55,6 @@ target/
 
 # JS stuff:
 node_modules
-static/dist
+/static/dist
 webpack-stats.json
 coverage
