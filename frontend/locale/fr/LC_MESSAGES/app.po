@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: modoboa-contacts 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-14 09:09+0200\n"
+"POT-Creation-Date: 2017-04-20 17:05+0200\n"
 "PO-Revision-Date: 2017-04-14 09:09+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -25,7 +25,7 @@ msgstr "Ajouter"
 msgid "Add category"
 msgstr "Ajouter une catégorie"
 
-#: src/components/ContactDetail.vue:51 src/components/ContactForm.vue:138
+#: src/components/ContactDetail.vue:51 src/components/ContactForm.vue:150
 msgid "Address"
 msgstr "Adresse"
 
@@ -39,7 +39,7 @@ msgstr "Catégories"
 
 #: src/components/CategoryForm.vue:16
 #: src/components/ContactCategoriesForm.vue:20
-#: src/components/ContactForm.vue:90
+#: src/components/ContactForm.vue:96
 msgid "Close"
 msgstr "Fermer"
 
@@ -47,7 +47,7 @@ msgstr "Fermer"
 msgid "Contacts"
 msgstr "Contacts"
 
-#: src/components/ContactList.vue:16
+#: src/components/ContactList.vue:16 src/components/ContactForm.vue:138
 msgid "Display name"
 msgstr "Nom complet"
 
@@ -59,7 +59,7 @@ msgstr "Editer le contact"
 msgid "Email"
 msgstr "E-mail"
 
-#: src/components/ContactForm.vue:88
+#: src/components/ContactForm.vue:94
 msgid "More"
 msgstr "Plus"
 
@@ -67,7 +67,7 @@ msgstr "Plus"
 msgid "New contact"
 msgstr "Nouveau contact"
 
-#: src/components/ContactDetail.vue:65 src/components/ContactForm.vue:153
+#: src/components/ContactDetail.vue:65 src/components/ContactForm.vue:165
 msgid "Note"
 msgstr "Note"
 
@@ -87,34 +87,38 @@ msgstr "Nom"
 msgid "Search"
 msgstr "Chercher"
 
-#: src/components/ContactForm.vue:126
+#: src/components/ContactForm.vue:132
 msgid "First name"
 msgstr "Prénom"
 
-#: src/components/ContactForm.vue:129
+#: src/components/ContactForm.vue:135
 msgid "Last name"
 msgstr "Nom"
 
-#: src/components/ContactForm.vue:132
+#: src/components/ContactForm.vue:141
 msgid "Company"
 msgstr "Société"
 
-#: src/components/ContactForm.vue:135
+#: src/components/ContactForm.vue:144
 msgid "Position"
 msgstr "Fonction"
 
-#: src/components/ContactForm.vue:141
+#: src/components/ContactForm.vue:147
+msgid "Birth date"
+msgstr "Date de naissance"
+
+#: src/components/ContactForm.vue:153
 msgid "Zip Code"
 msgstr "Code postal"
 
-#: src/components/ContactForm.vue:144
+#: src/components/ContactForm.vue:156
 msgid "City"
 msgstr "Ville"
 
-#: src/components/ContactForm.vue:147
+#: src/components/ContactForm.vue:159
 msgid "Country"
 msgstr "Pays"
 
-#: src/components/ContactForm.vue:150
+#: src/components/ContactForm.vue:162
 msgid "State/Province"
 msgstr "Etat/Région"
