@@ -46,3 +46,17 @@ class ContactViewSet(viewsets.ModelViewSet):
         qset = models.Contact.objects.filter(user=self.request.user)
         return qset.select_related("user").prefetch_related(
             "categories", "emails", "phone_numbers")
+
+
+class EmailAddressViewSet(viewsets.ReadOnlyModelViewSet):
+    """EmailAddress viewset."""
+
+    filter_backends = [filters.SearchFilter]
+    permission_classes = [IsAuthenticated]
+    search_fields = ("^address", "^contact__first_name", "^contact__last_name")
+    serializer_class = serializers.EmailAddressWithNameSerializer
+
+    def get_queryset(self):
+        """Filter based on current user."""
+        return models.EmailAddress.objects.filter(
+            contact__user=self.request.user)

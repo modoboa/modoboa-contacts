@@ -18,8 +18,9 @@ class Contact(models.Model):
     """A contact."""
 
     user = models.ForeignKey("core.User")
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    display_name = models.CharField(max_length=60, blank=True)
     birth_date = models.DateField(null=True)
 
     company = models.CharField(max_length=100, blank=True)

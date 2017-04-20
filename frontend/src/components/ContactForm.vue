@@ -21,6 +21,12 @@
             <span v-if="formErrors['last_name']" class="help-block">{{ formErrors['last_name'][0] }}</span>
           </div>
         </div>
+        <div class="form-group" :class="{ 'has-error': formErrors['display_name'] }">
+          <div class="col-sm-offset-1 col-sm-11">
+            <input v-model="contact.display_name" type="text" id="display_name" name="display_name" class="form-control" :placeholder="displayNamePlaceholder">
+            <span v-if="formErrors['display_name']" class="help-block">{{ formErrors['display_name'][0] }}</span>
+          </div>
+        </div>
         <div class="form-group" :class="{ 'has-error': formErrors['company'] || formErrors['position'] }">
           <label class="col-sm-1 control-label" for="company">
             <span class="fa fa-building"></span></label>
@@ -127,6 +133,9 @@
          },
          lastNamePlaceholder () {
              return this.$gettext('Last name')
+         },
+         displayNamePlaceholder () {
+             return this.$gettext('Display name')
          },
          companyPlaceholder () {
              return this.$gettext('Company')

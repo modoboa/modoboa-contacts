@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>
-      {{ contact.first_name }} {{ contact.last_name }}
+      <span v-if="contact.display_name">{{ contact.display_name }}</span><span v-else>{{ contact.first_name }} {{ contact.last_name }}</span>
       <button type="button" @click="showContactCategoriesForm = true" class="btn btn-default btn-xs"><span class="fa fa-tag"></span></button>
       <button type="button" class="btn btn-primary btn-xs" @click="showContactForm = true">
         <span class="fa fa-edit"></span></button>

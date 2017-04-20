@@ -11,6 +11,26 @@ from . import factories
 from . import models
 
 
+class TestDataMixin(object):
+    """Create some data."""
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data."""
+        super(TestDataMixin, cls).setUpTestData()
+        admin_factories.populate_database()
+        cls.user = core_models.User.objects.get(username="user@test.com")
+        cls.category = factories.CategoryFactory(user=cls.user, name="Family")
+        cls.contact = factories.ContactFactory(
+            user=cls.user, emails=["homer@simpson.com"])
+        factories.ContactFactory(
+            user=cls.user, first_name="Marge", emails=["marge@simpson.com"],
+            categories=[cls.category]
+        )
+        factories.ContactFactory(
+            user=cls.user, first_name="Bart", emails=["bart@simpson.com"])
+
+
 class CategoryViewSetTestCase(ModoAPITestCase):
     """Category ViewSet tests."""
 
@@ -41,24 +61,8 @@ class CategoryViewSetTestCase(ModoAPITestCase):
         self.assertEqual(response.status_code, 201)
 
 
-class ContactViewSetTestCase(ModoAPITestCase):
+class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
     """Contact ViewSet tests."""
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data."""
-        super(ContactViewSetTestCase, cls).setUpTestData()
-        admin_factories.populate_database()
-        cls.user = core_models.User.objects.get(username="user@test.com")
-        cls.category = factories.CategoryFactory(user=cls.user, name="Family")
-        cls.contact = factories.ContactFactory(
-            user=cls.user, emails=["homer@simpson.com"])
-        factories.ContactFactory(
-            user=cls.user, first_name="Marge", emails=["marge@simpson.com"],
-            categories=[cls.category]
-        )
-        factories.ContactFactory(
-            user=cls.user, first_name="Bart", emails=["bart@simpson.com"])
 
     def setUp(self):
         """Initiate test context."""
@@ -124,3 +128,22 @@ class ContactViewSetTestCase(ModoAPITestCase):
             self.contact.emails.first().address, "duff@simpson.com")
         self.assertEqual(self.contact.phone_numbers.count(), 1)
         self.assertEqual(self.contact.categories.first(), self.category)
+
+
+class EmailAddressViewSetTestCase(TestDataMixin, ModoAPITestCase):
+    """EmailAddressViewSet tests."""
+
+    def setUp(self):
+        """Initiate test context."""
+        self.client.force_login(self.user)
+
+    def test_emails_list(self):
+        """Check list endpoint."""
+        url = reverse("api:emailaddress-list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
+
+        response = self.client.get("{}?search=homer".format(url))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
