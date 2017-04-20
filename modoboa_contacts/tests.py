@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 from modoboa.admin import factories as admin_factories
 from modoboa.core import models as core_models
-from modoboa.lib.tests import ModoAPITestCase
+from modoboa.lib.tests import ModoAPITestCase, ModoTestCase
 
 from . import factories
 from . import models
@@ -31,6 +31,20 @@ class TestDataMixin(object):
         )
         factories.ContactFactory(
             user=cls.user, first_name="Bart", emails=["bart@simpson.com"])
+
+
+class ViewsTestCase(TestDataMixin, ModoTestCase):
+    """Check views."""
+
+    def setUp(self):
+        """Initiate test context."""
+        self.client.force_login(self.user)
+
+    def test_index(self):
+        """Test index view."""
+        url = reverse("modoboa_contacts:index")
+        response = self.client.get(url)
+        self.assertContains(response, '<div id="app">')
 
 
 class CategoryViewSetTestCase(TestDataMixin, ModoAPITestCase):

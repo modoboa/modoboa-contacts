@@ -13,6 +13,7 @@ import os
 from logging.handlers import SysLogHandler
 
 from modoboa.test_settings import *
+from modoboa_contacts.settings import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = (
     'ckeditor_uploader',
     'rest_framework',
     'rest_framework.authtoken',
+    'webpack_loader',
 )
 
 # A dedicated place to register Modoboa applications
@@ -141,6 +143,16 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Webpack
+WEBPACK_LOADER = {
+    'CONTACTS': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'modoboa_contacts/',
+        'STATS_FILE': CONTACTS_STATS_FILES.get("dev" if DEBUG else "prod"),
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
 
 # Modoboa settings
 #MODOBOA_CUSTOM_LOGO = os.path.join(MEDIA_URL, "custom_logo.png")
