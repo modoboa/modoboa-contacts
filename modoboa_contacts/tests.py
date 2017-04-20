@@ -132,6 +132,23 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             contact.phone_numbers.first().number,
             response.data["phone_numbers"][0]["number"])
 
+    def test_create_contact_quick(self):
+        """Create a contact with minimal information."""
+        data = {
+            "emails": [
+                {"address": "magie@simpson.com", "type": "home"}
+            ]
+        }
+        url = reverse("api:contact-list")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data["display_name"][0],
+                         "Name or display name required")
+
+        data["display_name"] = "Magie Simpson"
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+
     def test_create_contact_with_category(self):
         """Create a new contact with a category."""
         data = {

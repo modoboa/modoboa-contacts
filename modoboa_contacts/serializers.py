@@ -70,9 +70,9 @@ class ContactSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Make sure display name or first/last names are set."""
         condition = (
-            "first_name" not in data and
-            "last_name" not in data and
-            "display_name" not in data
+            not data.get("first_name") and
+            not data.get("last_name") and
+            not data.get("display_name")
         )
         if condition:
             msg = _("Name or display name required")
