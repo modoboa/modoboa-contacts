@@ -101,10 +101,65 @@ class ContactSerializer(serializers.ModelSerializer):
         if to_create:
             models.PhoneNumber.objects.bulk_create(to_create)
         if categories:
-            qset = models.Categories.objects.filter(pk__in=categories)
-            for category in qset:
+            for category in categories:
                 contact.categories.add(category)
         return contact
+
+    def update_emails(self, instance, emails):
+        """Update instance emails."""
+        local_addresses = []
+        local_objects = []
+        for email in instance.emails.all():
+            local_addresses.append(email.address)
+            local_objects.append(email)
+        to_create = []
+        for email in emails:
+            if email["address"] not in local_addresses:
+                to_create.append(
+                    models.EmailAddress(contact=instance, **email))
+                continue
+            index = local_addresses.index(email["address"])
+            local_email = local_objects[index]
+            condition = (
+                local_email.type != email["type"] or
+                local_email.address != email["address"])
+            if condition:
+                local_email.type = email["type"]
+                local_email.address = email["address"]
+                local_email.save()
+            local_addresses.pop(index)
+            local_objects.pop(index)
+        models.EmailAddress.objects.filter(
+            pk__in=[email.pk for email in local_objects]).delete()
+        models.EmailAddress.objects.bulk_create(to_create)
+
+    def update_phone_numbers(self, instance, phone_numbers):
+        """Update instance phone numbers."""
+        local_phones = []
+        local_objects = []
+        for phone in instance.phone_numbers.all():
+            local_phones.append(phone.number)
+            local_objects.append(phone)
+        to_create = []
+        for phone in phone_numbers:
+            if phone["number"] not in local_phones:
+                to_create.append(
+                    models.PhoneNumber(contact=instance, **phone))
+                continue
+            index = local_phones.index(phone["number"])
+            local_phone = local_objects[index]
+            condition = (
+                local_phone.type != phone["type"] or
+                local_phone.number != phone["number"])
+            if condition:
+                local_phone.type = phone["type"]
+                local_phone.number = phone["number"]
+                local_phone.save()
+            local_phones.pop(index)
+            local_objects.pop(index)
+        instance.phone_numbers.filter(
+            pk__in=[phone.pk for phone in local_objects]).delete()
+        models.PhoneNumber.objects.bulk_create(to_create)
 
     def update(self, instance, validated_data):
         """Update contact."""
@@ -114,46 +169,7 @@ class ContactSerializer(serializers.ModelSerializer):
             setattr(instance, key, value)
         instance.save()
 
-        addresses = dict(
-            (address.pk, address)
-            for address in instance.emails.all())
-        to_create = []
-        for email in emails:
-            pk = email.get("pk")
-            if not pk:
-                to_create.append(
-                    models.EmailAddress(contact=instance, **email))
-                continue
-            condition = (
-                addresses[pk].type != email["type"] or
-                addresses[pk].address != email["address"])
-            if condition:
-                addresses[pk].type = email["type"]
-                addresses[pk].address = email["address"]
-                addresses[pk].save()
-            del addresses[pk]
-        models.EmailAddress.objects.filter(pk__in=addresses.keys()).delete()
-        models.EmailAddress.objects.bulk_create(to_create)
-
-        phones = dict(
-            (phone.pk, phone)
-            for phone in instance.phone_numbers.all())
-        to_create = []
-        for phone in phone_numbers:
-            pk = phone.get("pk")
-            if not pk:
-                to_create.append(
-                    models.PhoneNumber(contact=instance, **phone))
-                continue
-            condition = (
-                phones[pk].type != phone["type"] or
-                phones[pk].number != phone["number"])
-            if condition:
-                phones[pk].type = phone["type"]
-                phones[pk].number = phone["number"]
-                phones[pk].save()
-            del phones[pk]
-        models.PhoneNumber.objects.filter(pk__in=phones.keys()).delete()
-        models.PhoneNumber.objects.bulk_create(to_create)
+        self.update_emails(instance, emails)
+        self.update_phone_numbers(instance, phone_numbers)
 
         return instance

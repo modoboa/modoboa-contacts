@@ -13,10 +13,19 @@ class CategoryFactory(factory.django.DjangoModelFactory):
 
 
 class EmailAddressFactory(factory.django.DjangoModelFactory):
-    """Contact factory."""
+    """Email address factory."""
 
     class Meta:
         model = models.EmailAddress
+
+    type = "home"
+
+
+class PhoneNumberFactory(factory.django.DjangoModelFactory):
+    """Phone number factory."""
+
+    class Meta:
+        model = models.PhoneNumber
 
     type = "home"
 
@@ -45,3 +54,11 @@ class ContactFactory(factory.django.DjangoModelFactory):
             return
         for item in extracted:
             EmailAddressFactory(contact=self, address=item)
+
+    @factory.post_generation
+    def phone_numbers(self, create, extracted, **dummy_kwargs):
+        """Add phone numbers to contact."""
+        if not create or not extracted:
+            return
+        for item in extracted:
+            PhoneNumberFactory(contact=self, number=item)

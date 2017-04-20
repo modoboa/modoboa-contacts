@@ -22,7 +22,9 @@ class TestDataMixin(object):
         cls.user = core_models.User.objects.get(username="user@test.com")
         cls.category = factories.CategoryFactory(user=cls.user, name="Family")
         cls.contact = factories.ContactFactory(
-            user=cls.user, emails=["homer@simpson.com"])
+            user=cls.user, emails=["homer@simpson.com"],
+            phone_numbers=["01234567889"],
+        )
         factories.ContactFactory(
             user=cls.user, first_name="Marge", emails=["marge@simpson.com"],
             categories=[cls.category]
@@ -31,16 +33,8 @@ class TestDataMixin(object):
             user=cls.user, first_name="Bart", emails=["bart@simpson.com"])
 
 
-class CategoryViewSetTestCase(ModoAPITestCase):
+class CategoryViewSetTestCase(TestDataMixin, ModoAPITestCase):
     """Category ViewSet tests."""
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create some data."""
-        super(CategoryViewSetTestCase, cls).setUpTestData()
-        admin_factories.populate_database()
-        cls.user = core_models.User.objects.get(username="user@test.com")
-        cls.category = factories.CategoryFactory(user=cls.user, name="Family")
 
     def setUp(self):
         """Initiate test context."""
@@ -59,6 +53,23 @@ class CategoryViewSetTestCase(ModoAPITestCase):
         data = {"name": u"Amitiés"}
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
+
+    def test_update_category(self):
+        """Update a category."""
+        url = reverse("api:category-detail", args=[self.category.pk])
+        data = {"name": u"Test"}
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.category.refresh_from_db()
+        self.assertEqual(self.category.name, "Test")
+
+    def test_delete_category(self):
+        """Try to delete a category."""
+        url = reverse("api:category-detail", args=[self.category.pk])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)
+        with self.assertRaises(models.Category.DoesNotExist):
+            self.category.refresh_from_db()
 
 
 class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
@@ -107,14 +118,34 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             contact.phone_numbers.first().number,
             response.data["phone_numbers"][0]["number"])
 
+    def test_create_contact_with_category(self):
+        """Create a new contact with a category."""
+        data = {
+            "first_name": "Magie", "last_name": "Simpson",
+            "emails": [
+                {"address": "magie@simpson.com", "type": "home"}
+            ],
+            "categories": [self.category.pk]
+        }
+        url = reverse("api:contact-list")
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, 201)
+        contact = models.Contact.objects.get(pk=response.data["pk"])
+        self.assertEqual(contact.categories.first(), self.category)
+
     def test_update_contact(self):
         """Update existing contact."""
         url = reverse("api:contact-detail", args=[self.contact.pk])
+        email_pk = self.contact.emails.first().pk
         data = {
             "first_name": "Homer 1", "last_name": "Simpson",
-            "emails": [{"address": "duff@simpson.com", "type": "work"}],
+            "emails": [
+                {"address": "duff@simpson.com", "type": "work"},
+                {"address": "homer@simpson.com", "type": "other"}
+            ],
             "phone_numbers": [
-                {"number": "+33123456789", "type": "home"}
+                {"number": "+33123456789", "type": "home"},
+                {"number": "01234567889", "type": "work"},
             ],
             "categories": [self.category.pk]
         }
@@ -123,11 +154,26 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
 
         self.contact.refresh_from_db()
         self.assertEqual(self.contact.first_name, "Homer 1")
-        self.assertEqual(self.contact.emails.count(), 1)
+        self.assertEqual(self.contact.emails.count(), 2)
         self.assertEqual(
-            self.contact.emails.first().address, "duff@simpson.com")
-        self.assertEqual(self.contact.phone_numbers.count(), 1)
+            models.EmailAddress.objects.get(pk=email_pk).type, "other")
+        self.assertEqual(self.contact.phone_numbers.count(), 2)
         self.assertEqual(self.contact.categories.first(), self.category)
+
+        data["emails"].pop(1)
+        data["phone_numbers"].pop(1)
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.contact.emails.count(), 1)
+        self.assertEqual(self.contact.phone_numbers.count(), 1)
+
+    def test_delete_contact(self):
+        """Try to delete a contact."""
+        url = reverse("api:contact-detail", args=[self.contact.pk])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)
+        with self.assertRaises(models.Contact.DoesNotExist):
+            self.contact.refresh_from_db()
 
 
 class EmailAddressViewSetTestCase(TestDataMixin, ModoAPITestCase):
