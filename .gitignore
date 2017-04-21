@@ -56,5 +56,5 @@ target/
 # JS stuff:
 node_modules
 /static/dist
-webpack-stats.json
+/frontend/webpack-stats.json
 coverage
