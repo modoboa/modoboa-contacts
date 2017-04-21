@@ -45,13 +45,6 @@ Edit the settings.py file of your modoboa instance and apply the following modif
         }
     }
 
-- Add the entry to the ``STATICFILES_DIRS`` variable::
-
-    STATICFILES_DIRS = (
-        # Other entries before...
-        CONTACTS_STATICFILE_DIR
-    )
-
 Finally, run the following commands to setup the database tables::
 
   $ cd <modoboa_instance_dir>
