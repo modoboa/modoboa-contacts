@@ -1,4 +1,2 @@
 include README.rst LICENSE requirements.txt
-recursive-include modoboa_contacts *.html *.js *.css *.png *.po *.mo
-recursive-include frontend/dist *.js *.js.map *.css *.css.map
-include frontend webpack-stats-prod.json
+recursive-include modoboa_contacts *.html *.js *.css *.png *.po *.mo *.js.map *.css.map *.json

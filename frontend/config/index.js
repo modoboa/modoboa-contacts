@@ -4,8 +4,7 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../../modoboa_contacts/static'),
     assetsSubDirectory: 'modoboa_contacts',
     assetsPublicPath: '/sitestatic/',
     productionSourceMap: true,

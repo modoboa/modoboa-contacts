@@ -66,7 +66,7 @@ setup(
     long_description=read('README.rst'),
     author='Antoine Nguyen',
     author_email='tonio@ngyn.org',
-    packages=find_packages() + ['frontend'],
+    packages=find_packages(),
     install_requires=parse_requirements(PIP_REQUIRES),
     dependency_links=parse_dependency_links(PIP_REQUIRES),
     classifiers=['Development Status :: 5 - Production/Stable',

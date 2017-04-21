@@ -2,13 +2,11 @@
 
 import os
 
-PLUGIN_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+PLUGIN_BASE_DIR = os.path.dirname(__file__)
 
 CONTACTS_STATS_FILES = {
     "dev": os.path.join(
-        PLUGIN_BASE_DIR, "frontend/webpack-stats.json"),
+        PLUGIN_BASE_DIR, "../frontend/webpack-stats.json"),
     "prod": os.path.join(
-        PLUGIN_BASE_DIR, "frontend/webpack-stats-prod.json")
+        PLUGIN_BASE_DIR, "static/modoboa_contacts/webpack-stats.json")
 }
-
-CONTACTS_STATICFILE_DIR = os.path.join(PLUGIN_BASE_DIR, "frontend", "dist")

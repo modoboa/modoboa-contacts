@@ -77,7 +77,10 @@ var webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
-    new BundleTracker({filename: './webpack-stats-prod.json'})
+    new BundleTracker({
+        path: config.build.assetsRoot,
+        filename: utils.assetsPath('webpack-stats.json')
+    })
   ]
 })
 
