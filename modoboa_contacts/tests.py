@@ -224,3 +224,11 @@ class EmailAddressViewSetTestCase(TestDataMixin, ModoAPITestCase):
         response = self.client.get("{}?search=homer".format(url))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
+
+        response = self.client.get("{}?search=Marge".format(url))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+
+        response = self.client.get("{}?search=Simpson".format(url))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 3)
