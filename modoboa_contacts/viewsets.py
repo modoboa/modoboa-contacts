@@ -53,7 +53,10 @@ class EmailAddressViewSet(viewsets.ReadOnlyModelViewSet):
 
     filter_backends = [filters.SearchFilter]
     permission_classes = [IsAuthenticated]
-    search_fields = ("^address", "^contact__first_name", "^contact__last_name")
+    search_fields = (
+        "^address", "^contact__display_name",
+        "^contact__first_name", "^contact__last_name",
+    )
     serializer_class = serializers.EmailAddressWithNameSerializer
 
     def get_queryset(self):
