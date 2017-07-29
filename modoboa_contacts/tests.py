@@ -131,6 +131,7 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
         self.assertEqual(
             contact.phone_numbers.first().number,
             response.data["phone_numbers"][0]["number"])
+        self.assertEqual(contact.display_name, "Magie Simpson")
 
     def test_create_contact_quick(self):
         """Create a contact with minimal information."""
