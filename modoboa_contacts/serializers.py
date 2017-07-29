@@ -81,6 +81,11 @@ class ContactSerializer(serializers.ModelSerializer):
                 "last_name": msg,
                 "display_name": msg
             })
+        if not data.get("display_name"):
+            data["display_name"] = data.get("first_name", "")
+            if data["display_name"]:
+                data["display_name"] += " "
+            data["display_name"] += data.get("last_name", "")
         return data
 
     def create(self, validated_data):
