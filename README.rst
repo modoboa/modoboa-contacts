@@ -30,20 +30,8 @@ Edit the settings.py file of your modoboa instance and apply the following modif
 
 - Add the following at the begining of the file::
 
-    from modoboa_contacts.settings import *
-
-- Add ``webpack_loader`` to the ``INSTALLED_APPS`` variable
-
-- Add the following lines::
-
-    WEBPACK_LOADER = {
-        'CONTACTS': {
-            'CACHE': not DEBUG,
-            'BUNDLE_DIR_NAME': 'modoboa_contacts/',
-            'STATS_FILE': CONTACTS_STATS_FILES.get("dev" if DEBUG else "prod"),
-            'IGNORE': ['.+\.hot-update.js', '.+\.map']
-        }
-    }
+  from modoboa_contacts import settings as modoboa_contacts_settings
+  modoboa_contacts_settings.apply(globals())
 
 Finally, run the following commands to setup the database tables::
 
