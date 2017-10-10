@@ -3,6 +3,8 @@ cache: pip
 python:
   - "2.7"
   - "3.4"
+  - "3.5"
+  - "3.6"
 
 env:
   - DB="POSTGRESQL"
@@ -18,7 +20,7 @@ before_install:
 
 install:
   - pip install codecov
-  - pip install -e git+https://github.com/tonioo/modoboa.git#egg=modoboa
+  - pip install -e git+https://github.com/modoboa/modoboa.git#egg=modoboa
   - pip install -q -r test-requirements.txt
   - python setup.py -q develop
   - nvm install 6.10
