@@ -28,10 +28,10 @@ Edit the settings.py file of your modoboa instance and apply the following modif
         'modoboa_contacts',
     )
 
-- Add the following at the begining of the file::
+- Add the following at the end of the file::
 
-  from modoboa_contacts import settings as modoboa_contacts_settings
-  modoboa_contacts_settings.apply(globals())
+    from modoboa_contacts import settings as modoboa_contacts_settings
+    modoboa_contacts_settings.apply(globals())
 
 Finally, run the following commands to setup the database tables::
 
