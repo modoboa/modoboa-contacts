@@ -21,6 +21,6 @@ def apply(settings):
             'CACHE': not DEBUG,
             'BUNDLE_DIR_NAME': 'modoboa_contacts/',
             'STATS_FILE': CONTACTS_STATS_FILES.get("dev" if DEBUG else "prod"),
-            'IGNORE': ['.+\.hot-update.js', '.+\.map']
+            'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
         }
     }

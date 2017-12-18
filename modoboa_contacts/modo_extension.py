@@ -21,4 +21,5 @@ class Contacts(ModoExtension):
     def load(self):
         pass
 
+
 exts_pool.register_extension(Contacts)
