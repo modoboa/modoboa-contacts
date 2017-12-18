@@ -1,2 +1,2 @@
-factory-boy
-testfixtures
+factory-boy>=2.4
+testfixtures==4.7.0
