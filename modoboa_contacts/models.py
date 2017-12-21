@@ -10,14 +10,14 @@ from . import constants
 class Category(models.Model):
     """A category for contacts."""
 
-    user = models.ForeignKey("core.User")
+    user = models.ForeignKey("core.User", on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
 
 
 class Contact(models.Model):
     """A contact."""
 
-    user = models.ForeignKey("core.User")
+    user = models.ForeignKey("core.User", on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     display_name = models.CharField(max_length=60, blank=True)
@@ -40,7 +40,8 @@ class Contact(models.Model):
 class EmailAddress(models.Model):
     """An email address."""
 
-    contact = models.ForeignKey(Contact, related_name="emails")
+    contact = models.ForeignKey(Contact, related_name="emails",
+                                on_delete=models.CASCADE)
     address = models.EmailField()
     type = models.CharField(
         max_length=20, choices=constants.EMAIL_TYPES)
@@ -49,7 +50,8 @@ class EmailAddress(models.Model):
 class PhoneNumber(models.Model):
     """A phone number."""
 
-    contact = models.ForeignKey(Contact, related_name="phone_numbers")
+    contact = models.ForeignKey(Contact, related_name="phone_numbers",
+                                on_delete=models.CASCADE)
     number = models.CharField(max_length=40)
     type = models.CharField(
         max_length=20, choices=constants.PHONE_TYPES)

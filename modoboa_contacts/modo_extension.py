@@ -1,6 +1,6 @@
 """Declare and register the contacts extension."""
 
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy
 
 from modoboa.core.extensions import ModoExtension, exts_pool
@@ -20,5 +20,6 @@ class Contacts(ModoExtension):
 
     def load(self):
         pass
+
 
 exts_pool.register_extension(Contacts)
