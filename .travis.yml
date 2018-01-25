@@ -43,11 +43,6 @@ after_success:
   - cd ../test_project
   - codecov
 
-before_deploy:
-  - cd ../modoboa_contacts
-  - django-admin compilemessages
-  - cd ..
-
 deploy:
   provider: pypi
   user: tonio
