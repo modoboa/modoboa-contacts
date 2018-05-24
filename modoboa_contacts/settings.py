@@ -14,13 +14,18 @@ CONTACTS_STATS_FILES = {
 
 def apply(settings):
     """Modify settings."""
-    DEBUG = settings['DEBUG']
-    settings["INSTALLED_APPS"] += ("webpack_loader", )
-    settings["WEBPACK_LOADER"] = {
-        'CONTACTS': {
-            'CACHE': not DEBUG,
-            'BUNDLE_DIR_NAME': 'modoboa_contacts/',
-            'STATS_FILE': CONTACTS_STATS_FILES.get("dev" if DEBUG else "prod"),
-            'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
+    DEBUG = settings["DEBUG"]
+    if "webpack_loader" not in settings["INSTALLED_APPS"]:
+        settings["INSTALLED_APPS"] += ("webpack_loader", )
+    wpl_config = {
+        "CONTACTS": {
+            "CACHE": not DEBUG,
+            "BUNDLE_DIR_NAME": "modoboa_radicale/",
+            "STATS_FILE": CONTACTS_STATS_FILES.get("dev" if DEBUG else "prod"),
+            "IGNORE": [".+\.hot-update.js", ".+\.map"]
         }
     }
+    if "WEBPACK_LOADER" in settings:
+        settings["WEBPACK_LOADER"].update(wpl_config)
+    else:
+        settings["WEBPACK_LOADER"] = wpl_config
