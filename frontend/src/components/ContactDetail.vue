@@ -32,7 +32,7 @@
               </tr>
               <tr v-for="(email, index) in contact.emails">
                 <td><span v-if="index === 0" class="fa fa-envelope"></span></td>
-                <td>{{ email.address }}</td>
+                <td><a :href="'mailto:' + email.address">{{ email.address }}</a></td>
                 <td><span class="label label-info">{{ email.type }}</span></td>
               </tr>
               <tr v-for="(phone, index) in contact.phone_numbers">
