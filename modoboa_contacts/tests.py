@@ -66,6 +66,8 @@ class TestDataMixin(object):
         self.set_global_parameter(
             "server_location", "http://example.test/radicale/",
             app="modoboa_radicale")
+        self.user.parameters.set_value("enable_carddav_sync", True)
+        self.user.save(update_fields=["_parameters"])
 
 
 class ViewsTestCase(TestDataMixin, ModoTestCase):
@@ -85,6 +87,14 @@ class ViewsTestCase(TestDataMixin, ModoTestCase):
         user = core_models.User.objects.get(username="user@test2.com")
         abook = user.addressbook_set.first()
         data = {"username": user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.assertEqual(response.status_code, 302)
+        abook.refresh_from_db()
+        self.assertIs(abook.last_sync, None)
+        # Now enable sync.
+        user.parameters.set_value("enable_carddav_sync", True)
+        user.save(update_fields=["_parameters"])
         with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
             response = self.client.post(reverse("core:login"), data)
         self.assertEqual(response.status_code, 302)

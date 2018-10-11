@@ -119,7 +119,11 @@ class ContactSerializer(serializers.ModelSerializer):
         if categories:
             for category in categories:
                 contact.categories.add(category)
-        if addressbook.last_sync:
+        condition = (
+            addressbook.last_sync and
+            addressbook.user.parameters.get_value("enable_carddav_sync")
+        )
+        if condition:
             tasks.push_contact_to_cdav(request, contact)
         return contact
 
@@ -190,7 +194,12 @@ class ContactSerializer(serializers.ModelSerializer):
         self.update_emails(instance, emails)
         self.update_phone_numbers(instance, phone_numbers)
 
-        if instance.addressbook.last_sync:
+        condition = (
+            instance.addressbook.last_sync and
+            instance.addressbook.user.parameters.get_value(
+                "enable_carddav_sync")
+        )
+        if condition:
             tasks.update_contact_cdav(self.context["request"], instance)
 
         return instance

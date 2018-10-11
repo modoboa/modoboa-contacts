@@ -27,7 +27,8 @@ class AddressBookViewSet(viewsets.GenericViewSet):
     def sync_to_cdav(self, request, *args, **kwargs):
         """Synchronize address book with CardDAV collection."""
         abook = request.user.addressbook_set.first()
-        tasks.push_addressbook_to_carddav(request, abook)
+        if request.user.parameters.get_value("enable_carddav_sync"):
+            tasks.push_addressbook_to_carddav(request, abook)
         return response.Response({})
 
     @decorators.list_route(methods=["get"])
@@ -36,7 +37,8 @@ class AddressBookViewSet(viewsets.GenericViewSet):
         abook = request.user.addressbook_set.first()
         if not abook.last_sync:
             return response.Response()
-        tasks.sync_addressbook_from_cdav(request, abook)
+        if request.user.parameters.get_value("enable_carddav_sync"):
+            tasks.sync_addressbook_from_cdav(request, abook)
         return response.Response({})
 
 
@@ -82,7 +84,8 @@ class ContactViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         """Also remove cdav contact."""
-        tasks.delete_contact_cdav(self.request, instance)
+        if self.request.user.parameters.get_value("enable_carddav_sync"):
+            tasks.delete_contact_cdav(self.request, instance)
         instance.delete()
 
 

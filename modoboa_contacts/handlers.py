@@ -57,7 +57,11 @@ def sync_addressbook_with_cdav(sender, username, password, **kwargs):
     """Launch the initial address book sync if needed."""
     abook = models.AddressBook.objects.filter(
         user__username=username, last_sync__isnull=True).first()
-    if abook is None:
+    condition = (
+        abook is None or
+        not abook.user.parameters.get_value("enable_carddav_sync")
+    )
+    if condition:
         return
     tasks.create_cdav_addressbook(abook, password)
     if not abook.contact_set.exists():
@@ -71,7 +75,8 @@ def inject_sync_poller(sender, caller, st_type, user, **kwargs):
     condition = (
         caller != "top" or
         st_type != "js" or
-        not hasattr(user, "mailbox")
+        not hasattr(user, "mailbox") or
+        not user.parameters.get_value("enable_carddav_sync")
     )
     if condition:
         return ""
