@@ -56,7 +56,6 @@ def sync_addressbook_from_cdav(request, addressbook):
             content = clt.get_vcard(card["href"]).decode()
             contact = models.Contact.objects.filter(
                 uid__in=[long_uid, short_uid]).first()
-            print(card, contact)
             if not contact:
                 contact = models.Contact(addressbook=addressbook)
             if contact.etag != card["etag"]:

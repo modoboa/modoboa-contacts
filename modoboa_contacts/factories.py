@@ -2,7 +2,20 @@
 
 import factory
 
+from modoboa.admin import factories as admin_factories
+
 from . import models
+
+
+class AddressBookFactory(factory.django.DjangoModelFactory):
+    """Address book factory."""
+
+    class Meta:
+        model = models.AddressBook
+
+    user = factory.SubFactory(admin_factories.UserFactory)
+    name = "Contacts"
+    _path = "contacts"
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):

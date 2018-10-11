@@ -100,4 +100,4 @@ class EmailAddressViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         """Filter based on current user."""
         return models.EmailAddress.objects.filter(
-            contact__user=self.request.user)
+            contact__addressbook__user=self.request.user)
