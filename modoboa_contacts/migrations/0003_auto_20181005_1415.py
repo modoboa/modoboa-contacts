@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
-                ('sync_token', models.CharField(max_length=30, null=True)),
+                ('sync_token', models.TextField(blank=True)),
                 ('last_sync', models.DateTimeField(null=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('_path', models.TextField()),

@@ -22,7 +22,7 @@ class AddressBook(models.Model):
     """An address book."""
 
     name = models.CharField(max_length=50)
-    sync_token = models.CharField(max_length=30, null=True)
+    sync_token = models.TextField(blank=True)
     last_sync = models.DateTimeField(null=True)
     user = models.ForeignKey("core.User", on_delete=models.CASCADE)
     _path = models.TextField()
