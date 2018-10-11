@@ -28,6 +28,9 @@ Vue.filter('formatDate', (value) => {
         return moment(String(value)).format('MM/DD/YYYY')
     }
 })
+Vue.filter('translate', value => {
+    return !value ? '' : Vue.prototype.$gettext(value.toString())
+})
 
 let csrftoken = Cookies.get('csrftoken')
 Vue.http.headers.common['X-CSRFTOKEN'] = csrftoken

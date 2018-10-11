@@ -14,7 +14,7 @@
         <hr>
         <div class="pull-right">
           <button type="button" class="btn btn-default" @click="close"><translate>Close</translate></button>
-          <input type="submit" class="btn btn-primary" value="Save">
+          <input type="submit" class="btn btn-primary" :value="'Save' | translate">
         </div>
         <div class="clearfix"></div>
       </form>

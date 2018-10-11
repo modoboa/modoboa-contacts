@@ -14,6 +14,7 @@ LOCALES = en fr
 LOCALE_FILES ?= $(patsubst %,$(OUTPUT_DIR)/locale/%/LC_MESSAGES/app.po,$(LOCALES))
 
 GETTEXT_HTML_SOURCES = $(shell find $(INPUT_DIR) -name '*.vue' -o -name '*.html' 2> /dev/null)
+GETTEXT_VUE_SOURCES = $(shell find $(INPUT_DIR) -name '*.vue')
 GETTEXT_JS_SOURCES = $(shell find $(INPUT_DIR) -name '*.vue' -o -name '*.js')
 
 # Makefile Targets
@@ -36,6 +37,7 @@ translations: ./$(INPUT_DIR)/translations.json
 	which gettext-extract
 # Extract gettext strings from templates files and create a POT dictionary template.
 	gettext-extract --quiet --output $@ $(GETTEXT_HTML_SOURCES)
+	gettext-extract --startDelimiter "" --endDelimiter "" --quiet --output $@ $(GETTEXT_VUE_SOURCES)
 # Extract gettext strings from JavaScript files.
 	xgettext --language=JavaScript --keyword=npgettext:1c,2,3 \
 		--from-code=utf-8 --join-existing --no-wrap \

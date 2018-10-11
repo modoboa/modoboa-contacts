@@ -12,14 +12,14 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "js-cookie": "^2.1.3",
-    "moment": "^2.18.1",
-    "vue": "^2.2.2",
-    "vue-gettext": "^2.0.10",
-    "vue-resource": "^1.0.3",
-    "vue-router": "^2.2.0",
-    "vuejs-datepicker": "^0.7.0",
-    "vuex": "^2.2.1"
+    "js-cookie": "^2.2.0",
+    "moment": "^2.22.2",
+    "vue": "^2.5.17",
+    "vue-gettext": "^2.1.0",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.1",
+    "vuejs-datepicker": "^1.5.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
@@ -37,6 +37,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^3.1.4",
     "css-loader": "^0.26.1",
+    "easygettext": "^2.7.0",
     "eslint": "^3.14.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^2.0.7",
@@ -75,11 +76,12 @@
     "url-loader": "^0.5.7",
     "vue-loader": "^11.3.4",
     "vue-style-loader": "^2.0.0",
-    "vue-template-compiler": "^2.2.6",
+    "vue-template-compiler": "^2.5.17",
     "webpack": "^2.2.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-bundle-tracker": "^0.2.0",
     "webpack-dev-middleware": "^1.10.0",
+    "webpack-dev-server": "^2.9.1",
     "webpack-hot-middleware": "^2.16.1",
     "webpack-merge": "^2.6.1"
   },

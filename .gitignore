@@ -20,6 +20,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+.eggs
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -57,4 +58,9 @@ target/
 node_modules
 /static/dist
 /frontend/webpack-stats.json
+/frontend/package-lock.json
 coverage
+/modoboa_contacts/static
+
+# Dev stuff:
+.ropeproject

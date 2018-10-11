@@ -17,7 +17,7 @@ class UserSettings(param_forms.UserParametersForm):
         initial=False,
         label=_("Synchonize address book using CardDAV"),
         help_text=_(
-            "Choose to synchronize your address book using CardDAV. "
+            "Choose to synchronize or not your address book using CardDAV. "
             "You will be able to access your contacts from the outside."
         )
     )

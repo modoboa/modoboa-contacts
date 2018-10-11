@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: modoboa-contacts 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-20 17:05+0200\n"
+"POT-Creation-Date: 2018-10-11 18:12+0200\n"
 "PO-Revision-Date: 2017-04-14 09:09+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,75 +17,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/components/ContactList.vue:9
+#: src/components/ContactList.vue:8
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/App.vue:14 src/components/CategoryForm.vue:4
+#: src/App.vue:13 src/components/CategoryForm.vue:3
 msgid "Add category"
 msgstr "Ajouter une catégorie"
 
-#: src/components/ContactDetail.vue:51 src/components/ContactForm.vue:150
+#: src/components/ContactDetail.vue:50 src/components/ContactForm.vue:150
+#: src/components/EmailField.vue:38
 msgid "Address"
 msgstr "Adresse"
 
-#: src/components/ContactDetail.vue:23
+#: src/components/AddressBookDetail.vue:3
+msgid "Address book information"
+msgstr "Information sur le carnet d'adresse"
+
+#: src/components/ContactCategoriesForm.vue:20
+msgid "Apply"
+msgstr "Appliquer"
+
+#: src/components/ContactDetail.vue:22
 msgid "at"
 msgstr "chez"
 
-#: src/App.vue:8 src/components/ContactCategoriesForm.vue:4
+#: src/components/ContactForm.vue:147
+msgid "Birth date"
+msgstr "Date de naissance"
+
+#: src/App.vue:7 src/components/ContactCategoriesForm.vue:3
 msgid "Categories"
 msgstr "Catégories"
 
-#: src/components/CategoryForm.vue:16
-#: src/components/ContactCategoriesForm.vue:20
-#: src/components/ContactForm.vue:96
+#: src/components/ContactForm.vue:156
+msgid "City"
+msgstr "Ville"
+
+#: src/components/AddressBookDetail.vue:13 src/components/CategoryForm.vue:15
+#: src/components/ContactCategoriesForm.vue:19
+#: src/components/ContactForm.vue:95
 msgid "Close"
 msgstr "Fermer"
 
-#: src/App.vue:6
+#: src/components/ContactForm.vue:141
+msgid "Company"
+msgstr "Société"
+
+#: src/App.vue:5
 msgid "Contacts"
 msgstr "Contacts"
 
-#: src/components/ContactList.vue:16 src/components/ContactForm.vue:138
+#: src/components/ContactForm.vue:159
+msgid "Country"
+msgstr "Pays"
+
+#: src/components/ContactForm.vue:138 src/components/ContactList.vue:23
 msgid "Display name"
 msgstr "Nom complet"
 
-#: src/components/ContactForm.vue:5
+#: src/components/ContactForm.vue:4
 msgid "Edit contact"
 msgstr "Editer le contact"
 
-#: src/components/ContactList.vue:17
+#: src/components/ContactList.vue:24
 msgid "Email"
 msgstr "E-mail"
-
-#: src/components/ContactForm.vue:94
-msgid "More"
-msgstr "Plus"
-
-#: src/components/ContactForm.vue:7
-msgid "New contact"
-msgstr "Nouveau contact"
-
-#: src/components/ContactDetail.vue:65 src/components/ContactForm.vue:165
-msgid "Note"
-msgstr "Note"
-
-#: src/components/ContactList.vue:18
-msgid "Phone"
-msgstr "Téléphone"
-
-#: src/components/ContactDetail.vue:17
-msgid "Summary"
-msgstr "Résumé"
-
-#: src/components/CategoryForm.vue:40
-msgid "Name"
-msgstr "Nom"
-
-#: src/components/SearchForm.vue:23
-msgid "Search"
-msgstr "Chercher"
 
 #: src/components/ContactForm.vue:132
 msgid "First name"
@@ -95,30 +92,62 @@ msgstr "Prénom"
 msgid "Last name"
 msgstr "Nom"
 
-#: src/components/ContactForm.vue:141
-msgid "Company"
-msgstr "Société"
+#: src/components/ContactForm.vue:93
+msgid "More"
+msgstr "Plus"
+
+#: src/components/CategoryForm.vue:35
+msgid "Name"
+msgstr "Nom"
+
+#: src/components/ContactForm.vue:6
+msgid "New contact"
+msgstr "Nouveau contact"
+
+#: src/components/ContactDetail.vue:64 src/components/ContactForm.vue:165
+msgid "Note"
+msgstr "Note"
+
+#: src/components/ContactList.vue:25
+msgid "Phone"
+msgstr "Téléphone"
+
+#: src/components/PhoneNumberField.vue:38
+msgid "Phone number"
+msgstr "Numéro de téléphone"
 
 #: src/components/ContactForm.vue:144
 msgid "Position"
 msgstr "Fonction"
 
-#: src/components/ContactForm.vue:147
-msgid "Birth date"
-msgstr "Date de naissance"
+#: src/components/CategoryForm.vue:16
+msgid "Save"
+msgstr "Enregistrer"
 
-#: src/components/ContactForm.vue:153
-msgid "Zip Code"
-msgstr "Code postal"
-
-#: src/components/ContactForm.vue:156
-msgid "City"
-msgstr "Ville"
-
-#: src/components/ContactForm.vue:159
-msgid "Country"
-msgstr "Pays"
+#: src/components/SearchForm.vue:23
+msgid "Search"
+msgstr "Chercher"
 
 #: src/components/ContactForm.vue:162
 msgid "State/Province"
 msgstr "Etat/Région"
+
+#: src/components/ContactDetail.vue:16
+msgid "Summary"
+msgstr "Résumé"
+
+#: src/components/ContactList.vue:16
+msgid "Synchronize your address book"
+msgstr "Synchroniser votre carnet d'adresse"
+
+#: src/components/AddressBookDetail.vue:10
+msgid "The credentials are the same than the ones you use to access Modoboa."
+msgstr "Les identifiants sont les mêmes que ceux utilisés pour accéder à Modoboa."
+
+#: src/components/AddressBookDetail.vue:6
+msgid "To access this address book from the outside (such as Mozilla Thunderbird or your smartphone), use the following URL:"
+msgstr "Pour accéder à ce carnet d'adresse depuis l'extérieur (comme Mozilla Thunderbird ou votre smartphone), utilisez l'URL suivante :"
+
+#: src/components/ContactForm.vue:153
+msgid "Zip Code"
+msgstr "Code postal"

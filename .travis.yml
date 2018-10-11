@@ -14,7 +14,10 @@ env:
 
 sudo: false
 
-cache: pip
+cache:
+  pip: true
+  directories:
+    - frontend/node_modules
 
 addons:
   postgresql: '9.3'
@@ -28,8 +31,9 @@ install:
   - pip install -r requirements.txt
   - pip install -r test-requirements.txt
   - python setup.py develop
-  - nvm install 6.10
+  - nvm install 8.12
   - cd frontend
+  - npm prune
   - npm install
 
 script:
@@ -44,6 +48,10 @@ after_success:
   - codecov
 
 before_deploy:
+  - cd ..
+  - django-admin compilemessages
+  - cd ../frontend
+  - npm run build
   - cd ..
   
 deploy:
