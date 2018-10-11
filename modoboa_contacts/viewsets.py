@@ -1,11 +1,43 @@
 """Contacts viewsets."""
 
 import django_filters.rest_framework
-from rest_framework import filters, viewsets
+from rest_framework import decorators, filters, response, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from . import models
 from . import serializers
+from . import tasks
+
+
+class AddressBookViewSet(viewsets.GenericViewSet):
+    """Address book viewset."""
+
+    permission_classes = (IsAuthenticated, )
+
+    @decorators.list_route(methods=["get"])
+    def default(self, request, *args, **kwargs):
+        """Return default user address book."""
+        abook = request.user.addressbook_set.first()
+        if not abook:
+            return response.Response(status_code=404)
+        serializer = serializers.AddressBookSerializer(abook)
+        return response.Response(serializer.data)
+
+    @decorators.list_route(methods=["get"])
+    def sync_to_cdav(self, request, *args, **kwargs):
+        """Synchronize address book with CardDAV collection."""
+        abook = request.user.addressbook_set.first()
+        tasks.push_addressbook_to_carddav(request, abook)
+        return response.Response({})
+
+    @decorators.list_route(methods=["get"])
+    def sync_from_cdav(self, request, *args, **kwargs):
+        """Synchronize from CardDAV address book."""
+        abook = request.user.addressbook_set.first()
+        if not abook.last_sync:
+            return response.Response()
+        tasks.sync_addressbook_from_cdav(request, abook)
+        return response.Response({})
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -43,9 +75,15 @@ class ContactViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Filter based on current user."""
-        qset = models.Contact.objects.filter(user=self.request.user)
-        return qset.select_related("user").prefetch_related(
+        qset = models.Contact.objects.filter(
+            addressbook__user=self.request.user)
+        return qset.prefetch_related(
             "categories", "emails", "phone_numbers")
+
+    def perform_destroy(self, instance):
+        """Also remove cdav contact."""
+        tasks.delete_contact_cdav(self.request, instance)
+        instance.delete()
 
 
 class EmailAddressViewSet(viewsets.ReadOnlyModelViewSet):

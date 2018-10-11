@@ -2,9 +2,39 @@
 
 from __future__ import unicode_literals
 
+import os
+import uuid
+
+from dateutil.parser import parse
+import vobject
+
 from django.db import models
+from django.utils.translation import ugettext as _
+
+from modoboa.lib import exceptions as lib_exceptions
+from modoboa.parameters import tools as param_tools
 
 from . import constants
+from . import __version__
+
+
+class AddressBook(models.Model):
+    """An address book."""
+
+    name = models.CharField(max_length=50)
+    sync_token = models.CharField(max_length=30, null=True)
+    last_sync = models.DateTimeField(null=True)
+    user = models.ForeignKey("core.User", on_delete=models.CASCADE)
+    _path = models.TextField()
+
+    @property
+    def url(self):
+        server_location = param_tools.get_global_parameter(
+            "server_location", app="modoboa_radicale")
+        if not server_location:
+            raise lib_exceptions.InternalError(
+                _("Server location is not set, please fix it."))
+        return os.path.join(server_location, self.user.username, self._path)
 
 
 class Category(models.Model):
@@ -17,7 +47,10 @@ class Category(models.Model):
 class Contact(models.Model):
     """A contact."""
 
-    user = models.ForeignKey("core.User", on_delete=models.CASCADE)
+    addressbook = models.ForeignKey(AddressBook, on_delete=models.CASCADE)
+    uid = models.CharField(
+        max_length=100, unique=True, null=True, db_index=True)
+    etag = models.TextField(blank=True, db_index=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     display_name = models.CharField(max_length=60, blank=True)
@@ -35,6 +68,86 @@ class Contact(models.Model):
     note = models.TextField(blank=True)
 
     categories = models.ManyToManyField(Category, blank=True)
+
+    def __init__(self, *args, **kwargs):
+        """Set uid for new object."""
+        super(Contact, self).__init__(*args, **kwargs)
+        if not self.pk:
+            self.uid = "{}.vcf".format(uuid.uuid4())
+
+    @property
+    def url(self):
+        return "{}/{}.vcf".format(self.addressbook.url, self.uid)
+
+    def to_vcard(self):
+        """Convert this contact to a vCard."""
+        card = vobject.vCard()
+        card.add("prodid").value = "-//Modoboa//Contacts plugin {}//EN".format(
+            __version__)
+        card.add("uid").value = self.uid
+        card.add("n").value = vobject.vcard.Name(
+            family=self.last_name, given=self.first_name)
+        card.add("fn").value = self.display_name
+        card.add("org").value = [self.company]
+        card.add("title").value = self.position
+        card.add("adr").value = vobject.vcard.Address(
+            street=self.address, city=self.city, code=self.zipcode,
+            country=self.country, region=self.state)
+        if self.birth_date:
+            card.add("bday").value = self.birth_date.isoformat()
+        card.add("note").value = self.note
+        for email in EmailAddress.objects.filter(contact=self):
+            attr = card.add("email")
+            attr.value = email.address
+            attr.type_param = email.type
+        for phone in PhoneNumber.objects.filter(contact=self):
+            attr = card.add("tel")
+            attr.value = phone.number
+            attr.type_param = phone.type
+        return card.serialize()
+
+    def update_from_vcard(self, content):
+        """Update this contact according to given vcard."""
+        vcard = vobject.readOne(content)
+        self.uid = vcard.uid.value
+        self.first_name = vcard.n.value.given
+        self.last_name = vcard.n.value.family
+        address = getattr(vcard, "adr", None)
+        if address:
+            self.address = address.value.street
+            self.zipcode = address.value.code
+            self.city = address.value.city
+            self.state = address.value.region
+            self.country = address.value.country
+        birth_date = getattr(vcard, "bday", None)
+        if birth_date:
+            self.birth_date = parse(birth_date.value)
+        for cfield, mfield in constants.CDAV_TO_MODEL_FIELDS_MAP.items():
+            value = getattr(vcard, cfield, None)
+            if value:
+                if isinstance(value.value, list):
+                    setattr(self, mfield, value.value[0])
+                else:
+                    setattr(self, mfield, value.value)
+        self.save()
+        email_list = getattr(vcard, "email_list", [])
+        EmailAddress.objects.filter(contact=self).delete()
+        to_create = []
+        for email in email_list:
+            to_create.append(EmailAddress(
+                contact=self, address=email.value.lower(),
+                type=email.type_param.lower()
+            ))
+        EmailAddress.objects.bulk_create(to_create)
+        PhoneNumber.objects.filter(contact=self).delete()
+        to_create = []
+        phone_list = getattr(vcard, "tel_list", [])
+        for tel in phone_list:
+            to_create.append(PhoneNumber(
+                contact=self, number=tel.value.lower(),
+                type=tel.type_param.lower()
+            ))
+        PhoneNumber.objects.bulk_create(to_create)
 
 
 class EmailAddress(models.Model):
@@ -55,3 +168,6 @@ class PhoneNumber(models.Model):
     number = models.CharField(max_length=40)
     type = models.CharField(
         max_length=20, choices=constants.PHONE_TYPES)
+
+    def __str__(self):
+        return "{}: {}".format(self.type, self.number)

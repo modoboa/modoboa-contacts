@@ -5,6 +5,15 @@ from django.utils.translation import ugettext as _
 from rest_framework import serializers
 
 from . import models
+from . import tasks
+
+
+class AddressBookSerializer(serializers.ModelSerializer):
+    """Address book serializer."""
+
+    class Meta:
+        model = models.AddressBook
+        fields = ("pk", "name", "url")
 
 
 class EmailAddressSerializer(serializers.ModelSerializer):
@@ -90,11 +99,13 @@ class ContactSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Use current user."""
-        user = self.context["request"].user
+        request = self.context["request"]
+        addressbook = request.user.addressbook_set.first()
         categories = validated_data.pop("categories", [])
         emails = validated_data.pop("emails")
         phone_numbers = validated_data.pop("phone_numbers", [])
-        contact = models.Contact.objects.create(user=user, **validated_data)
+        contact = models.Contact.objects.create(
+            addressbook=addressbook, **validated_data)
         to_create = []
         for email in emails:
             to_create.append(models.EmailAddress(contact=contact, **email))
@@ -108,6 +119,8 @@ class ContactSerializer(serializers.ModelSerializer):
         if categories:
             for category in categories:
                 contact.categories.add(category)
+        if addressbook.last_sync:
+            tasks.push_contact_to_cdav(request, contact)
         return contact
 
     def update_emails(self, instance, emails):
@@ -176,5 +189,8 @@ class ContactSerializer(serializers.ModelSerializer):
 
         self.update_emails(instance, emails)
         self.update_phone_numbers(instance, phone_numbers)
+
+        if instance.addressbook.last_sync:
+            tasks.update_contact_cdav(self.context["request"], instance)
 
         return instance

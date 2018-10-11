@@ -8,6 +8,14 @@
         <button type="button" class="btn btn-primary" @click="showContactForm = true">
           <span class="fa fa-plus"></span> <translate>Add</translate>
         </button>
+        <button type="button" class="btn btn-default" @click="showInfo = true">
+          <span class="fa fa-info-circle"></span>
+        </button>
+        <button v-if="!abookSynced"
+                class="btn btn-success"
+                @click="launchAbookSync">
+          <translate>Synchronize your address book</translate>
+        </button>
       </div>
     </div>
     <table v-if="contacts" class="table">
@@ -35,66 +43,84 @@
     </table>
     <contact-categories-form :index="contactIndex" v-if="showContactCategoriesForm" @close="closeContactCategoriesForm"></contact-categories-form>
     <contact-form :pk="currentContactPk" v-if="showContactForm" @close="closeContactForm"></contact-form>
+    <addressbook-detail v-if="showInfo" @close="showInfo = false" :addressbook="addressBook">
+    </addressbook-detail>
   </div>
 </template>
 
 <script>
- import { mapGetters } from 'vuex'
- import ContactCategoriesForm from './ContactCategoriesForm.vue'
- import ContactForm from './ContactForm.vue'
- import SearchForm from './SearchForm.vue'
- 
- export default {
-     components: {
-         'contact-categories-form': ContactCategoriesForm,
-         'contact-form': ContactForm,
-         'search-form': SearchForm
-     },
-     data () {
-         return {
-             currentContactPk: null,
-             contactIndex: null,
-             showContactForm: false,
-             showContactCategoriesForm: false
-         }
-     },
-     props: {
-         pk: null
-     },
-     computed: mapGetters([
-         'contacts'
-     ]),
-     created () {
-         this.getContacts(this.$route.params)
-     },
-     methods: {
-         getContacts ({ query, category }) {
-             this.$store.dispatch('getContacts', [query, category])
-         },
-         closeContactCategoriesForm () {
-             this.showContactCategoriesForm = false
-             this.contactIndex = null
-         },
-         closeContactForm () {
-             this.showContactForm = false
-             this.currentContactPk = null
-         },
-         deleteContact (pk) {
-             this.$store.dispatch('deleteContact', pk)
-         },
-         editContact (pk) {
-             this.currentContactPk = pk
-             this.showContactForm = true
-         },
-         editContactCategories (index) {
-             this.contactIndex = index
-             this.showContactCategoriesForm = true
-         }
-     },
-     watch: {
-         '$route' (to, from) {
-             this.getContacts(this.$route.params)
-         }
-     }
- }
+import { mapGetters } from 'vuex'
+import * as api from '@/api'
+import AddressBookDetail from './AddressBookDetail.vue'
+import ContactCategoriesForm from './ContactCategoriesForm.vue'
+import ContactForm from './ContactForm.vue'
+import SearchForm from './SearchForm.vue'
+
+export default {
+    components: {
+        'contact-categories-form': ContactCategoriesForm,
+        'contact-form': ContactForm,
+        'search-form': SearchForm,
+        'addressbook-detail': AddressBookDetail
+    },
+    data () {
+        return {
+            currentContactPk: null,
+            contactIndex: null,
+            showContactForm: false,
+            showContactCategoriesForm: false,
+            abookSynced: window.userProfile.abookSynced,
+            showInfo: false,
+            addressBook: null
+        }
+    },
+    props: {
+        pk: null
+    },
+    computed: {
+        ...mapGetters([
+            'contacts'
+        ])
+    },
+    created () {
+        this.getContacts(this.$route.params)
+        api.getDefaultAddressBook().then(response => {
+            this.addressBook = response.data
+        })
+    },
+    methods: {
+        getContacts ({ query, category }) {
+            this.$store.dispatch('getContacts', [query, category])
+        },
+        closeContactCategoriesForm () {
+            this.showContactCategoriesForm = false
+            this.contactIndex = null
+        },
+        closeContactForm () {
+            this.showContactForm = false
+            this.currentContactPk = null
+        },
+        deleteContact (pk) {
+            this.$store.dispatch('deleteContact', pk)
+        },
+        editContact (pk) {
+            this.currentContactPk = pk
+            this.showContactForm = true
+        },
+        editContactCategories (index) {
+            this.contactIndex = index
+            this.showContactCategoriesForm = true
+        },
+        launchAbookSync () {
+            api.syncAddressBook().then(response => {
+                this.abookSynced = true
+            })
+        }
+    },
+    watch: {
+        '$route' (to, from) {
+            this.getContacts(this.$route.params)
+        }
+    }
+}
 </script>

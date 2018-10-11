@@ -3,8 +3,23 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 
+var customAddressBookActions = {
+    default: { method: 'GET', 'url': '/api/v1/address-books/default/' },
+    sync: { method: 'GET', url: '/api/v1/address-books/sync_to_cdav/' }
+}
+var addressBookResource = Vue.resource(
+    '/api/v1/address-books{/pk}/', {}, customAddressBookActions)
 var categoryResource = Vue.resource('/api/v1/categories{/pk}/')
 var contactResource = Vue.resource('/api/v1/contacts{/pk}/')
+
+// address book API
+const getDefaultAddressBook = () => {
+    return addressBookResource.default()
+}
+
+const syncAddressBook = () => {
+    return addressBookResource.sync()
+}
 
 // categories API
 const createCategory = (data) => {
@@ -45,6 +60,9 @@ const updateContact = (pk, data) => {
 }
 
 export {
+    getDefaultAddressBook,
+    syncAddressBook,
+
     createCategory,
     getCategories,
 

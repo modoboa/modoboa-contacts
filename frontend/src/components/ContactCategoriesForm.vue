@@ -28,12 +28,8 @@
 
 <script>
  import { mapGetters } from 'vuex'
- import Modal from './Modal.vue'
 
  export default {
-     components: {
-         'modal': Modal
-     },
      computed: mapGetters([
          'categories'
      ]),
