@@ -10,6 +10,7 @@ import App from './App.vue'
 import translations from './translations.json'
 import ContactDetail from './components/ContactDetail.vue'
 import ContactList from './components/ContactList.vue'
+import Modal from './components/Modal.vue'
 
 Vue.use(GetTextPlugin, {
     availableLanguages: {
@@ -19,6 +20,8 @@ Vue.use(GetTextPlugin, {
     translations: translations
 })
 Vue.use(VueRouter)
+
+Vue.component('modal', Modal)
 
 Vue.filter('formatDate', (value) => {
     if (value) {

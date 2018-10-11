@@ -1,14 +1,39 @@
 # coding: utf-8
 """Contacts backend tests."""
 
+import httmock
+
+from django import forms
 from django.urls import reverse
+from django.utils import timezone
 
 from modoboa.admin import factories as admin_factories
 from modoboa.core import models as core_models
 from modoboa.lib.tests import ModoAPITestCase, ModoTestCase
+from modoboa.parameters import forms as param_forms
+from modoboa.parameters import tools as param_tools
 
 from . import factories
+from . import mocks
 from . import models
+
+
+class RadicaleParametersForm(param_forms.AdminParametersForm):
+    """Since contacts plugin depends on radicale, we need this."""
+
+    app = "modoboa_radicale"
+
+    server_location = forms.URLField(
+        label="Server URL",
+        help_text=(
+            "The URL of your Radicale server. "
+            "It will be used to construct calendar URLs."
+        ),
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+
+param_tools.registry.add("global", RadicaleParametersForm, "Radicale")
 
 
 class TestDataMixin(object):
@@ -20,25 +45,61 @@ class TestDataMixin(object):
         super(TestDataMixin, cls).setUpTestData()
         admin_factories.populate_database()
         cls.user = core_models.User.objects.get(username="user@test.com")
+        cls.addressbook = cls.user.addressbook_set.first()
         cls.category = factories.CategoryFactory(user=cls.user, name="Family")
         cls.contact = factories.ContactFactory(
-            user=cls.user, emails=["homer@simpson.com"],
+            addressbook=cls.addressbook, emails=["homer@simpson.com"],
             phone_numbers=["01234567889"],
         )
         factories.ContactFactory(
-            user=cls.user, first_name="Marge", emails=["marge@simpson.com"],
+            addressbook=cls.addressbook,
+            first_name="Marge", emails=["marge@simpson.com"],
             categories=[cls.category]
         )
         factories.ContactFactory(
-            user=cls.user, first_name="Bart", emails=["bart@simpson.com"])
+            addressbook=cls.addressbook,
+            first_name="Bart", emails=["bart@simpson.com"])
+
+    def setUp(self):
+        """Initiate test context."""
+        self.client.force_login(self.user)
+        self.set_global_parameter(
+            "server_location", "http://example.test/radicale/",
+            app="modoboa_radicale")
+        self.user.parameters.set_value("enable_carddav_sync", True)
+        self.user.save(update_fields=["_parameters"])
 
 
 class ViewsTestCase(TestDataMixin, ModoTestCase):
     """Check views."""
 
-    def setUp(self):
-        """Initiate test context."""
-        self.client.force_login(self.user)
+    def test_post_login(self):
+        """Check that remote collection creation request is sent."""
+        # 1. Addressbook with contacts must be synced manually
+        data = {"username": self.user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.assertEqual(response.status_code, 302)
+        self.addressbook.refresh_from_db()
+        self.assertIs(self.addressbook.last_sync, None)
+
+        # 2. Addressbook with no contacts can be considered synced
+        user = core_models.User.objects.get(username="user@test2.com")
+        abook = user.addressbook_set.first()
+        data = {"username": user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.assertEqual(response.status_code, 302)
+        abook.refresh_from_db()
+        self.assertIs(abook.last_sync, None)
+        # Now enable sync.
+        user.parameters.set_value("enable_carddav_sync", True)
+        user.save(update_fields=["_parameters"])
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.assertEqual(response.status_code, 302)
+        abook.refresh_from_db()
+        self.assertIsNot(abook.last_sync, None)
 
     def test_index(self):
         """Test index view."""
@@ -47,12 +108,47 @@ class ViewsTestCase(TestDataMixin, ModoTestCase):
         self.assertContains(response, '<div id="app">')
 
 
+class AddressBookViewSetTestCase(TestDataMixin, ModoAPITestCase):
+    """Address book ViewSet tests."""
+
+    def test_default(self):
+        """Test default endpoint."""
+        response = self.client.get(reverse("api:addressbook-default"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["name"], "Contacts")
+
+    def test_sync_to_cdav(self):
+        """Test sync to CardDAV endpoint."""
+        data = {"username": self.user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        with httmock.HTTMock(
+                mocks.options_mock,
+                mocks.mkcol_mock,
+                mocks.put_mock,
+                mocks.propfind_mock):
+            response = self.client.get(reverse("api:addressbook-sync-to-cdav"))
+        self.assertEqual(response.status_code, 200)
+        abook = self.user.addressbook_set.first()
+        self.assertIsNot(abook.sync_token, None)
+        contact = abook.contact_set.first()
+        self.assertIsNot(contact.etag, None)
+
+    def test_sync_from_cdav(self):
+        """Test sync from CardDAV endpoint."""
+        data = {"username": self.user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.user.addressbook_set.update(last_sync=timezone.now())
+        with httmock.HTTMock(
+                mocks.options_mock, mocks.report_mock, mocks.get_mock):
+            response = self.client.get(
+                reverse("api:addressbook-sync-from-cdav"))
+        self.assertEqual(response.status_code, 200)
+
+
 class CategoryViewSetTestCase(TestDataMixin, ModoAPITestCase):
     """Category ViewSet tests."""
-
-    def setUp(self):
-        """Initiate test context."""
-        self.client.force_login(self.user)
 
     def test_get_categories(self):
         """Check category list endpoint."""
@@ -80,7 +176,8 @@ class CategoryViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_delete_category(self):
         """Try to delete a category."""
         url = reverse("api:category-detail", args=[self.category.pk])
-        response = self.client.delete(url)
+        with httmock.HTTMock(mocks.options_mock, mocks.delete_mock):
+            response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
         with self.assertRaises(models.Category.DoesNotExist):
             self.category.refresh_from_db()
@@ -88,10 +185,6 @@ class CategoryViewSetTestCase(TestDataMixin, ModoAPITestCase):
 
 class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
     """Contact ViewSet tests."""
-
-    def setUp(self):
-        """Initiate test context."""
-        self.client.force_login(self.user)
 
     def test_contact_list(self):
         """Check contact list endpoint."""
@@ -114,6 +207,10 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
 
     def test_create_contact(self):
         """Create a new contact."""
+        data = {"username": self.user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.user.addressbook_set.update(last_sync=timezone.now())
         data = {
             "first_name": "Magie", "last_name": "Simpson",
             "emails": [
@@ -124,7 +221,9 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             ]
         }
         url = reverse("api:contact-list")
-        response = self.client.post(url, data, format="json")
+        with httmock.HTTMock(
+                mocks.options_mock, mocks.mkcol_mock, mocks.put_mock):
+            response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         contact = models.Contact.objects.get(pk=response.data["pk"])
         self.assertEqual(contact.emails.first().address, "magie@simpson.com")
@@ -132,6 +231,7 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             contact.phone_numbers.first().number,
             response.data["phone_numbers"][0]["number"])
         self.assertEqual(contact.display_name, "Magie Simpson")
+        self.assertIsNot(contact.etag, None)
 
     def test_create_contact_quick(self):
         """Create a contact with minimal information."""
@@ -167,6 +267,10 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
 
     def test_update_contact(self):
         """Update existing contact."""
+        data = {"username": self.user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
+        self.user.addressbook_set.update(last_sync=timezone.now())
         url = reverse("api:contact-detail", args=[self.contact.pk])
         email_pk = self.contact.emails.first().pk
         data = {
@@ -181,7 +285,9 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             ],
             "categories": [self.category.pk]
         }
-        response = self.client.put(url, data, format="json")
+        with httmock.HTTMock(
+                mocks.options_mock, mocks.put_mock, mocks.report_mock):
+            response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
 
         self.contact.refresh_from_db()
@@ -191,18 +297,26 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             models.EmailAddress.objects.get(pk=email_pk).type, "other")
         self.assertEqual(self.contact.phone_numbers.count(), 2)
         self.assertEqual(self.contact.categories.first(), self.category)
+        self.assertIsNot(self.contact.etag, None)
 
         data["emails"].pop(1)
         data["phone_numbers"].pop(1)
-        response = self.client.put(url, data, format="json")
+        with httmock.HTTMock(
+                mocks.options_mock, mocks.put_mock, mocks.report_mock):
+            response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.contact.emails.count(), 1)
         self.assertEqual(self.contact.phone_numbers.count(), 1)
 
     def test_delete_contact(self):
         """Try to delete a contact."""
+        data = {"username": self.user.username, "password": "toto"}
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(reverse("core:login"), data)
         url = reverse("api:contact-detail", args=[self.contact.pk])
-        response = self.client.delete(url)
+        with httmock.HTTMock(
+                mocks.options_mock, mocks.mkcol_mock, mocks.delete_mock):
+            response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
         with self.assertRaises(models.Contact.DoesNotExist):
             self.contact.refresh_from_db()
@@ -210,10 +324,6 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
 
 class EmailAddressViewSetTestCase(TestDataMixin, ModoAPITestCase):
     """EmailAddressViewSet tests."""
-
-    def setUp(self):
-        """Initiate test context."""
-        self.client.force_login(self.user)
 
     def test_emails_list(self):
         """Check list endpoint."""

@@ -17,3 +17,9 @@ PHONE_TYPES = (
     ("fax", ugettext_lazy("Fax")),
     ("pager", ugettext_lazy("Pager"))
 )
+
+CDAV_TO_MODEL_FIELDS_MAP = {
+    "org": "company",
+    "title": "position",
+    "note": "note",
+}

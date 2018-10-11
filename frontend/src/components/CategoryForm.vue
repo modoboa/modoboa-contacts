@@ -23,12 +23,7 @@
 </template>
 
 <script>
- import Modal from './Modal.vue'
-
  export default {
-     components: {
-         'modal': Modal
-     },
      data () {
          return {
              category: {},
