@@ -50,7 +50,8 @@ class Contact(models.Model):
     addressbook = models.ForeignKey(AddressBook, on_delete=models.CASCADE)
     uid = models.CharField(
         max_length=100, unique=True, null=True, db_index=True)
-    etag = models.TextField(blank=True, db_index=True)
+    # Can't define an index on etag field because of MySQL...
+    etag = models.TextField(blank=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     display_name = models.CharField(max_length=60, blank=True)

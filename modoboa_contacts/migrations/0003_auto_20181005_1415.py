@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contact',
             name='etag',
-            field=models.TextField(blank=True, db_index=True),
+            field=models.TextField(blank=True),
         ),
         migrations.AddField(
             model_name='contact',
