@@ -12,12 +12,13 @@
 {% endblock %}
 
 {% block extra_js %}
+  {% if sync_enabled %}
   <script>
   window.userProfile = {
       abookSynced: {% if abook_synced %}true{% else %}false{% endif %}
   };
   </script>
-
+  {% endif %}
   {% if not debug %}
     {% render_bundle 'manifest' 'js' 'CONTACTS' %}
     {% render_bundle 'vendor' 'js' 'CONTACTS' %}

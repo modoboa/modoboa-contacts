@@ -11,7 +11,7 @@
         <button type="button" class="btn btn-default" @click="showInfo = true">
           <span class="fa fa-info-circle"></span>
         </button>
-        <button v-if="!abookSynced"
+        <button v-if="abookSynced === false"
                 class="btn btn-success"
                 @click="launchAbookSync">
           <translate>Synchronize your address book</translate>

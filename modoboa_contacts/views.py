@@ -15,6 +15,8 @@ class IndexView(auth_mixins.LoginRequiredMixin, generic.TemplateView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context.update({
             "selection": "contacts",
+            "sync_enabled": self.request.user.parameters.get_value(
+                "enable_carddav_sync"),
             "abook_synced": self.request.user.addressbook_set.filter(
                 last_sync__isnull=False).exists()
         })
