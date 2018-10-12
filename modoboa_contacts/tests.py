@@ -66,20 +66,27 @@ class TestDataMixin(object):
         self.set_global_parameter(
             "server_location", "http://example.test/radicale/",
             app="modoboa_radicale")
-        self.user.parameters.set_value("enable_carddav_sync", True)
-        self.user.save(update_fields=["_parameters"])
+
+    def enable_cdav_sync(self):
+        """Enable sync. for user."""
+        url = reverse("core:user_preferences")
+        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
+            response = self.client.post(
+                url, {"modoboa_contacts-enable_carddav_sync": True,
+                      "modoboa_contacts-sync_frequency": 300},
+            )
+        self.assertEqual(response.status_code, 200)
 
 
 class ViewsTestCase(TestDataMixin, ModoTestCase):
     """Check views."""
 
-    def test_post_login(self):
+    def test_user_settings(self):
         """Check that remote collection creation request is sent."""
         # 1. Addressbook with contacts must be synced manually
         data = {"username": self.user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
-        self.assertEqual(response.status_code, 302)
+        self.client.post(reverse("core:login"), data)
+        self.enable_cdav_sync()
         self.addressbook.refresh_from_db()
         self.assertIs(self.addressbook.last_sync, None)
 
@@ -87,17 +94,11 @@ class ViewsTestCase(TestDataMixin, ModoTestCase):
         user = core_models.User.objects.get(username="user@test2.com")
         abook = user.addressbook_set.first()
         data = {"username": user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
-        self.assertEqual(response.status_code, 302)
+        self.client.post(reverse("core:login"), data)
         abook.refresh_from_db()
         self.assertIs(abook.last_sync, None)
         # Now enable sync.
-        user.parameters.set_value("enable_carddav_sync", True)
-        user.save(update_fields=["_parameters"])
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
-        self.assertEqual(response.status_code, 302)
+        self.enable_cdav_sync()
         abook.refresh_from_db()
         self.assertIsNot(abook.last_sync, None)
 
@@ -121,8 +122,8 @@ class AddressBookViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_sync_to_cdav(self):
         """Test sync to CardDAV endpoint."""
         data = {"username": self.user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
+        response = self.client.post(reverse("core:login"), data)
+        self.enable_cdav_sync()
         with httmock.HTTMock(
                 mocks.options_mock,
                 mocks.mkcol_mock,
@@ -138,8 +139,8 @@ class AddressBookViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_sync_from_cdav(self):
         """Test sync from CardDAV endpoint."""
         data = {"username": self.user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
+        response = self.client.post(reverse("core:login"), data)
+        self.enable_cdav_sync()
         self.user.addressbook_set.update(last_sync=timezone.now())
         with httmock.HTTMock(
                 mocks.options_mock, mocks.report_mock, mocks.get_mock):
@@ -177,8 +178,7 @@ class CategoryViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_delete_category(self):
         """Try to delete a category."""
         url = reverse("api:category-detail", args=[self.category.pk])
-        with httmock.HTTMock(mocks.options_mock, mocks.delete_mock):
-            response = self.client.delete(url)
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
         with self.assertRaises(models.Category.DoesNotExist):
             self.category.refresh_from_db()
@@ -209,8 +209,8 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_create_contact(self):
         """Create a new contact."""
         data = {"username": self.user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
+        response = self.client.post(reverse("core:login"), data)
+        self.enable_cdav_sync()
         self.user.addressbook_set.update(last_sync=timezone.now())
         data = {
             "first_name": "Magie", "last_name": "Simpson",
@@ -222,8 +222,7 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
             ]
         }
         url = reverse("api:contact-list")
-        with httmock.HTTMock(
-                mocks.options_mock, mocks.mkcol_mock, mocks.put_mock):
+        with httmock.HTTMock(mocks.options_mock, mocks.put_mock):
             response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, 201)
         contact = models.Contact.objects.get(pk=response.data["pk"])
@@ -269,8 +268,8 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_update_contact(self):
         """Update existing contact."""
         data = {"username": self.user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
+        self.client.post(reverse("core:login"), data)
+        self.enable_cdav_sync()
         self.user.addressbook_set.update(last_sync=timezone.now())
         url = reverse("api:contact-detail", args=[self.contact.pk])
         email_pk = self.contact.emails.first().pk
@@ -312,11 +311,10 @@ class ContactViewSetTestCase(TestDataMixin, ModoAPITestCase):
     def test_delete_contact(self):
         """Try to delete a contact."""
         data = {"username": self.user.username, "password": "toto"}
-        with httmock.HTTMock(mocks.options_mock, mocks.mkcol_mock):
-            response = self.client.post(reverse("core:login"), data)
+        response = self.client.post(reverse("core:login"), data)
+        self.enable_cdav_sync()
         url = reverse("api:contact-detail", args=[self.contact.pk])
-        with httmock.HTTMock(
-                mocks.options_mock, mocks.mkcol_mock, mocks.delete_mock):
+        with httmock.HTTMock(mocks.options_mock, mocks.delete_mock):
             response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
         with self.assertRaises(models.Contact.DoesNotExist):
