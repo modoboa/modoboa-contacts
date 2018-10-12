@@ -48,7 +48,7 @@ after_success:
   - codecov
 
 before_deploy:
-  - cd ..
+  - cd ../modoboa_contacts
   - django-admin compilemessages
   - cd ../frontend
   - npm run build
