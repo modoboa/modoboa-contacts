@@ -30,7 +30,8 @@
       <tbody>
         <tr v-for="(contact, index) in contacts" :key="contact.pk">
           <td><router-link :to="{ name: 'contact-detail', params: { pk: contact.pk } }"><span v-if="contact.display_name">{{ contact.display_name }}</span><span v-else>{{ contact.first_name }} {{ contact.last_name }}</span></router-link></td>
-          <td>{{ contact.emails[0].address }}</td>
+          <td v-if="contact.emails.length">{{ contact.emails[0].address }}</td>
+          <td v-else></td>
           <td v-if="contact.phone_numbers.length">{{ contact.phone_numbers[0].number }}</td>
           <td v-else></td>
           <td class="text-right">
@@ -89,7 +90,7 @@ export default {
         })
     },
     methods: {
-        getContacts ({ query, category }) {
+        getContacts (query, category) {
             this.$store.dispatch('getContacts', [query, category])
         },
         closeContactCategoriesForm () {

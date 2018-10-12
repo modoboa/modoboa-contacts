@@ -43,7 +43,7 @@ const getContact = (pk) => {
     return contactResource.get({pk: pk})
 }
 
-const getContacts = ({ query, category }) => {
+const getContacts = (query, category) => {
     var params = {}
 
     if (query !== undefined) {

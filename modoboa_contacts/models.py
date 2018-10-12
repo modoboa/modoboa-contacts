@@ -111,8 +111,10 @@ class Contact(models.Model):
         """Update this contact according to given vcard."""
         vcard = vobject.readOne(content)
         self.uid = vcard.uid.value
-        self.first_name = vcard.n.value.given
-        self.last_name = vcard.n.value.family
+        name = getattr(vcard, "n", None)
+        if name:
+            self.first_name = name.value.given
+            self.last_name = name.value.family
         address = getattr(vcard, "adr", None)
         if address:
             self.address = address.value.street

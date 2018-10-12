@@ -22,7 +22,7 @@ const actions = {
     },
 
     getContacts ({ commit }, [query, category]) {
-        return api.getContacts({ query, category }).then(response => {
+        return api.getContacts(query, category).then(response => {
             commit(types.SET_CONTACTS, { contacts: response.data })
         })
     }

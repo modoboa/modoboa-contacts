@@ -80,7 +80,10 @@ def push_contact_to_cdav(request, contact):
 def update_contact_cdav(request, contact):
     """Update existing contact."""
     clt = get_cdav_client(request, contact.addressbook, True)
-    result = clt.update_vcard(contact.to_vcard(), contact.uid, contact.etag)
+    uid = contact.uid
+    if not uid.endswith(".vcf"):
+        uid += ".vcf"
+    result = clt.update_vcard(contact.to_vcard(), uid, contact.etag)
     contact.etag = result["cards"][0]["etag"]
     contact.save(update_fields=["etag"])
 
@@ -88,4 +91,7 @@ def update_contact_cdav(request, contact):
 def delete_contact_cdav(request, contact):
     """Delete a contact."""
     clt = get_cdav_client(request, contact.addressbook, True)
-    clt.delete_vcard(contact.uid, contact.etag)
+    uid = contact.uid
+    if not uid.endswith(".vcf"):
+        uid += ".vcf"
+    clt.delete_vcard(uid, contact.etag)
