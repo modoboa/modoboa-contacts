@@ -1,10 +1,15 @@
 """Contacts forms."""
 
 from django import forms
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from modoboa.lib import cryptutils
 from modoboa.lib import form_utils
+from modoboa.lib import signals as lib_signals
 from modoboa.parameters import forms as param_forms
+
+from . import tasks
 
 
 class UserSettings(param_forms.UserParametersForm):
@@ -42,3 +47,18 @@ class UserSettings(param_forms.UserParametersForm):
                 _("Minimum allowed value is 60s")
             )
         return self.cleaned_data["sync_frequency"]
+
+    def save(self, *args, **kwargs):
+        """Create remote cal if necessary."""
+        super(UserSettings, self).save(*args, **kwargs)
+        if not self.cleaned_data["enable_carddav_sync"]:
+            return
+        abook = self.user.addressbook_set.first()
+        if abook.last_sync:
+            return
+        request = lib_signals.get_request()
+        tasks.create_cdav_addressbook(
+            abook, cryptutils.decrypt(request.session["password"]))
+        if not abook.contact_set.exists():
+            abook.last_sync = timezone.now()
+            abook.save(update_fields=["last_sync"])

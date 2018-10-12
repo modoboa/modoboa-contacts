@@ -115,6 +115,7 @@ export default {
         launchAbookSync () {
             api.syncAddressBook().then(response => {
                 this.abookSynced = true
+                window.location.reload()
             })
         }
     },
