@@ -1,5 +1,6 @@
 """Contacts forms."""
 
+from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from modoboa.lib import form_utils
@@ -21,3 +22,23 @@ class UserSettings(param_forms.UserParametersForm):
             "You will be able to access your contacts from the outside."
         )
     )
+
+    sync_frequency = forms.IntegerField(
+        initial=300,
+        label=_("Synchronization frequency"),
+        help_text=_(
+            "Interval in seconds between 2 synchronization requests"
+        )
+    )
+
+    visibility_rules = {
+        "sync_frequency": "enable_carddav_sync=True"
+    }
+
+    def clean_sync_frequency(self):
+        """Make sure frequency is a positive integer."""
+        if self.cleaned_data["sync_frequency"] < 60:
+            raise forms.ValidationError(
+                _("Minimum allowed value is 60s")
+            )
+        return self.cleaned_data["sync_frequency"]

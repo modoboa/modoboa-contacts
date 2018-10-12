@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-11 17:41+0200\n"
+"POT-Creation-Date: 2018-10-12 11:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,21 +45,33 @@ msgstr "Fax"
 msgid "Pager"
 msgstr "Pager"
 
-#: forms.py:14
+#: forms.py:15
 msgid "Synchronization"
 msgstr "Synchronisation"
 
-#: forms.py:18
+#: forms.py:19
 msgid "Synchonize address book using CardDAV"
 msgstr "Synchroniser le carnet d'adresse via CardDAV"
 
-#: forms.py:20
+#: forms.py:21
 msgid ""
 "Choose to synchronize or not your address book using CardDAV. You will be "
 "able to access your contacts from the outside."
 msgstr ""
 "Choisissez de synchroniser ou pas votre carnet d'adresse via CardDAV. Vous "
 "pourrez accéder à vos contacts depuis l'extérieur."
+
+#: forms.py:28
+msgid "Synchronization frequency"
+msgstr "Fréquence de synchronisation"
+
+#: forms.py:30
+msgid "Interval in seconds between 2 synchronization requests"
+msgstr "Intervalle en secondes entre 2 requêtes de synchronisation"
+
+#: forms.py:42
+msgid "Minimum allowed value is 60s"
+msgstr "La valeur minimale autorisée est 60s"
 
 #: handlers.py:24 modo_extension.py:17 modo_extension.py:25
 #: templates/modoboa_contacts/index.html:6

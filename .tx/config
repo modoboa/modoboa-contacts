@@ -1,6 +1,12 @@
 [main]
 host = https://www.transifex.com
 
+[modoboa.modoboa-contacts-djangopo]
+file_filter = modoboa_contacts/locale/<lang>/LC_MESSAGES/app.po
+source_file = modoboa_contacts/locale/en/LC_MESSAGES/app.po
+source_lang = en
+type = PO
+
 [modoboa.modoboa-contacts-app]
 file_filter = frontend/locale/<lang>/LC_MESSAGES/app.po
 source_file = frontend/locale/en/LC_MESSAGES/app.po

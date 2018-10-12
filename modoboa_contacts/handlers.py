@@ -83,8 +83,9 @@ def inject_sync_poller(sender, caller, st_type, user, **kwargs):
     return """<script>
 $(document).ready(function () {
     new Poller('%s', {
-        interval: 300 * 1000
+        interval: %d * 1000
     });
 });
 </script>
-""" % (reverse("api:addressbook-sync-from-cdav"))
+""" % (reverse("api:addressbook-sync-from-cdav"),
+       user.parameters.get_value("sync_frequency"))
