@@ -40,9 +40,23 @@
           </div>
         </div>
 
-        <email-field v-for="(email, index) in contact.emails" :key="index" :index="index" :email="email" :errors="(formErrors.emails) ? formErrors.emails[index] : {}" @add="addEmailField" @delete="(index) => deleteEmailField(index)"></email-field>
+        <email-field v-for="(email, index) in contact.emails"
+                     :key="`email-${index}`"
+                     :index="index"
+                     :email="email"
+                     :errors="(formErrors.emails) ? formErrors.emails[index] : {}"
+                     @add="addEmailField"
+                     @delete="(index) => deleteEmailField(index)">
+        </email-field>
 
-        <phone-number-field v-for="(phone_number, index) in contact.phone_numbers" :key="index" :index="index" :phone="phone_number" :errors="(formErrors.phone_numbers) ? formErrors.phone_numbers[index] : {}" @add="addPhoneNumberField" @delete="(index) => deletePhoneNumberField(index)"></phone-number-field>
+        <phone-number-field v-for="(phone_number, index) in contact.phone_numbers"
+                            :key="`phone-${index}`"
+                            :index="index"
+                            :phone="phone_number"
+                            :errors="(formErrors.phone_numbers) ? formErrors.phone_numbers[index] : {}"
+                            @add="addPhoneNumberField"
+                            @delete="(index) => deletePhoneNumberField(index)">
+        </phone-number-field>
 
         <div v-if="showMore">
           <div class="form-group" :class="{ 'has-error': formErrors['birth_date'] }">
@@ -175,6 +189,9 @@
          if (this.pk) {
              api.getContact(this.pk).then((res) => {
                  this.contact = res.data
+                 if (this.contact.emails.length === 0) {
+                     this.contact.emails.push({})
+                 }
                  if (this.contact.phone_numbers.length === 0) {
                      this.contact.phone_numbers.push({})
                  }
