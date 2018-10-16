@@ -70,7 +70,7 @@ export default {
             contactIndex: null,
             showContactForm: false,
             showContactCategoriesForm: false,
-            abookSynced: window.userProfile.abookSynced,
+            abookSynced: window.userProfile ? window.userProfile.abookSynced : true,
             showInfo: false,
             addressBook: null
         }
