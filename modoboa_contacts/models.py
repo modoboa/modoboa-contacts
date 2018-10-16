@@ -137,19 +137,19 @@ class Contact(models.Model):
         EmailAddress.objects.filter(contact=self).delete()
         to_create = []
         for email in email_list:
-            to_create.append(EmailAddress(
-                contact=self, address=email.value.lower(),
-                type=email.type_param.lower()
-            ))
+            addr = EmailAddress(contact=self, address=email.value.lower())
+            if hasattr(email, "type_param"):
+                addr.type = email.type_param.lower()
+            to_create.append(addr)
         EmailAddress.objects.bulk_create(to_create)
         PhoneNumber.objects.filter(contact=self).delete()
         to_create = []
         phone_list = getattr(vcard, "tel_list", [])
         for tel in phone_list:
-            to_create.append(PhoneNumber(
-                contact=self, number=tel.value.lower(),
-                type=tel.type_param.lower()
-            ))
+            pnum = PhoneNumber(contact=self, number=tel.value.lower())
+            if hasattr(tel, "type_param"):
+                pnum.type = tel.type_param.lower()
+            to_create.append(pnum)
         PhoneNumber.objects.bulk_create(to_create)
 
 
