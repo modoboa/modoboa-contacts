@@ -24,6 +24,7 @@ module.exports = {
     env: require('./dev.env'),
     serverAddr: 'localhost',
     serverPort: 8001,
+    assetsRoot: path.resolve(__dirname, '../../modoboa_contacts/static'),
     assetsSubDirectory: 'modoboa_contacts',
     assetsPublicPath: '/sitestatic/',
     proxyTable: {},

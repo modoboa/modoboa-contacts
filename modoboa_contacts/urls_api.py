@@ -7,10 +7,10 @@ from . import viewsets
 
 router = routers.SimpleRouter()
 router.register(
-    r"address-books", viewsets.AddressBookViewSet, base_name="addressbook")
-router.register(r"categories", viewsets.CategoryViewSet, base_name="category")
-router.register(r"contacts", viewsets.ContactViewSet, base_name="contact")
+    r"address-books", viewsets.AddressBookViewSet, basename="addressbook")
+router.register(r"categories", viewsets.CategoryViewSet, basename="category")
+router.register(r"contacts", viewsets.ContactViewSet, basename="contact")
 router.register(
-    r"emails", viewsets.EmailAddressViewSet, base_name="emailaddress")
+    r"emails", viewsets.EmailAddressViewSet, basename="emailaddress")
 
 urlpatterns = router.urls

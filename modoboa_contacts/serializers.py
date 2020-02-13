@@ -187,8 +187,10 @@ class ContactSerializer(serializers.ModelSerializer):
         """Update contact."""
         emails = validated_data.pop("emails")
         phone_numbers = validated_data.pop("phone_numbers", [])
+        categories = validated_data.pop("categories", [])
         for key, value in validated_data.items():
             setattr(instance, key, value)
+        instance.categories.set(categories)
         instance.save()
 
         self.update_emails(instance, emails)

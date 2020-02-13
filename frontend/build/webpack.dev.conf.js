@@ -24,7 +24,10 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),
-    new BundleTracker({filename: './webpack-stats.json'}),
+    new BundleTracker({
+        path: config.build.assetsRoot,
+        filename: utils.assetsPath('webpack-stats.json')
+    }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

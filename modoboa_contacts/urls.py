@@ -1,9 +1,11 @@
 """Contacts urls."""
 
-from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
+app_name = "modoboa_contacts"
+
 urlpatterns = [
-    url(r"^$", views.IndexView.as_view(), name="index")
+    path('', views.IndexView.as_view(), name="index")
 ]

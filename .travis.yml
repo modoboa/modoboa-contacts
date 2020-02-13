@@ -1,9 +1,8 @@
 language: python
 python:
-  - '2.7'
-  - '3.4'
   - '3.5'
   - '3.6'
+  - '3.7'
 
 env:
   global:
@@ -53,7 +52,7 @@ before_deploy:
   - cd ../frontend
   - npm run build
   - cd ..
-  
+
 deploy:
   provider: pypi
   user: tonio

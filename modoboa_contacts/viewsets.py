@@ -1,7 +1,8 @@
 """Contacts viewsets."""
 
 import django_filters.rest_framework
-from rest_framework import decorators, filters, response, viewsets
+from rest_framework.decorators import action
+from rest_framework import filters, response, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from . import models
@@ -13,9 +14,10 @@ class AddressBookViewSet(viewsets.GenericViewSet):
     """Address book viewset."""
 
     permission_classes = (IsAuthenticated, )
+    serializer_class = serializers.AddressBookSerializer
 
-    @decorators.list_route(methods=["get"])
-    def default(self, request, *args, **kwargs):
+    @action(methods=["get"], detail=False)
+    def default(self, request):
         """Return default user address book."""
         abook = request.user.addressbook_set.first()
         if not abook:
@@ -23,16 +25,16 @@ class AddressBookViewSet(viewsets.GenericViewSet):
         serializer = serializers.AddressBookSerializer(abook)
         return response.Response(serializer.data)
 
-    @decorators.list_route(methods=["get"])
-    def sync_to_cdav(self, request, *args, **kwargs):
+    @action(methods=["get"], detail=False)
+    def sync_to_cdav(self, request):
         """Synchronize address book with CardDAV collection."""
         abook = request.user.addressbook_set.first()
         if request.user.parameters.get_value("enable_carddav_sync"):
             tasks.push_addressbook_to_carddav(request, abook)
         return response.Response({})
 
-    @decorators.list_route(methods=["get"])
-    def sync_from_cdav(self, request, *args, **kwargs):
+    @action(methods=["get"], detail=False)
+    def sync_from_cdav(self, request):
         """Synchronize from CardDAV address book."""
         abook = request.user.addressbook_set.first()
         if not abook.last_sync:
@@ -57,7 +59,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ContactFilter(django_filters.rest_framework.FilterSet):
     """Filter for Contact."""
 
-    category = django_filters.CharFilter(name="categories__name")
+    category = django_filters.CharFilter(field_name="categories__name")
 
     class Meta:
         model = models.Contact
