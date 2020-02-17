@@ -1,6 +1,5 @@
 import chai from 'chai'
 import sinonChai from 'sinon-chai'
-import { expect } from 'chai'
 import sinon from 'sinon'
 
 import Vue from 'vue'
@@ -20,7 +19,7 @@ describe('SearchForm.vue', () => {
     it('should render correct contents', () => {
         const Ctor = Vue.extend(SearchForm)
         const vm = new Ctor().$mount()
-        expect(vm.$el).to.be.ok
+        chai.expect(vm.$el).to.be.ok // eslint-disable-line no-unused-expressions
     })
 
     it('form submit should emit "search" event with query', () => {
@@ -31,6 +30,6 @@ describe('SearchForm.vue', () => {
         vm.$on('search', spy)
         vm.query = 'Test'
         vm.$el.dispatchEvent(new Event('submit'))
-        expect(spy).to.have.been.calledWith('Test')
+        chai.expect(spy).to.have.been.calledWith('Test')
     })
 })

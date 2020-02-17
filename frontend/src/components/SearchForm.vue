@@ -12,21 +12,21 @@
 </template>
 
 <script>
- export default {
-     data () {
-         return {
-             query: ''
-         }
-     },
-     computed: {
-         searchPlaceholder () {
-             return this.$gettext('Search')
-         }
-     },
-     methods: {
-         search () {
-             this.$emit('search', this.query)
-         }
-     }
- }
+export default {
+    data () {
+        return {
+            query: ''
+        }
+    },
+    computed: {
+        searchPlaceholder () {
+            return this.$gettext('Search')
+        }
+    },
+    methods: {
+        search () {
+            this.$emit('search', this.query)
+        }
+    }
+}
 </script>

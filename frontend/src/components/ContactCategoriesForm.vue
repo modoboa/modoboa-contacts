@@ -3,7 +3,7 @@
     <div slot="header">
       <h3 class="modal-title"><translate>Categories</translate></h3>
     </div>
-    
+
     <div slot="body">
       <form id="categoriesForm" class="form-horizontal" method="post" v-on:submit.prevent="saveCategories()">
         <div v-for="category in categories" :key="category.pk" class="form-group">
@@ -27,38 +27,38 @@
 </template>
 
 <script>
- import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
- export default {
-     computed: mapGetters([
-         'categories'
-     ]),
-     data () {
-         return {
-             checkedCategories: []
-         }
-     },
-     props: {
-         index: {
-             type: Number,
-             required: true
-         }
-     },
-     methods: {
-         close () {
-             this.$emit('close')
-         },
-         saveCategories () {
-             var contact = JSON.parse(
-                 JSON.stringify(this.$store.state.list.contacts[this.index]))
-             contact.categories = this.checkedCategories
-             this.$store.dispatch('updateContact', [contact.pk, contact]).then(res => {
-                 this.close()
-             })
-         }
-     },
-     created () {
-         this.checkedCategories = this.$store.state.list.contacts[this.index].categories
-     }
- }
+export default {
+    computed: mapGetters([
+        'categories'
+    ]),
+    data () {
+        return {
+            checkedCategories: []
+        }
+    },
+    props: {
+        index: {
+            type: Number,
+            required: true
+        }
+    },
+    methods: {
+        close () {
+            this.$emit('close')
+        },
+        saveCategories () {
+            var contact = JSON.parse(
+                JSON.stringify(this.$store.state.list.contacts[this.index]))
+            contact.categories = this.checkedCategories
+            this.$store.dispatch('updateContact', [contact.pk, contact]).then(res => {
+                this.close()
+            })
+        }
+    },
+    created () {
+        this.checkedCategories = this.$store.state.list.contacts[this.index].categories
+    }
+}
 </script>

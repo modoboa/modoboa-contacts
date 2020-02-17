@@ -4,7 +4,7 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
 var customAddressBookActions = {
-    default: { method: 'GET', 'url': '/api/v1/address-books/default/' },
+    default: { method: 'GET', url: '/api/v1/address-books/default/' },
     sync: { method: 'GET', url: '/api/v1/address-books/sync_to_cdav/' }
 }
 var addressBookResource = Vue.resource(
@@ -36,11 +36,11 @@ const createContact = (data) => {
 }
 
 const deleteContact = (pk) => {
-    return contactResource.delete({pk: pk})
+    return contactResource.delete({ pk: pk })
 }
 
 const getContact = (pk) => {
-    return contactResource.get({pk: pk})
+    return contactResource.get({ pk: pk })
 }
 
 const getContacts = (query, category) => {
@@ -56,7 +56,7 @@ const getContacts = (query, category) => {
 }
 
 const updateContact = (pk, data) => {
-    return contactResource.update({pk: pk}, data)
+    return contactResource.update({ pk: pk }, data)
 }
 
 export {

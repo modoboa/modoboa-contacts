@@ -19,24 +19,24 @@
 </template>
 
 <script>
- export default {
-     props: {
-         errors: Object,
-         index: {
-             type: Number,
-             required: true
-         },
-         phone: Object
-     },
-     data: function () {
-         return {
-             types: ['cellular', 'fax', 'home', 'main', 'pager', 'work', 'other']
-         }
-     },
-     computed: {
-         phoneNumberPlaceholder () {
-             return this.$gettext('Phone number')
-         }
-     }
- }
+export default {
+    props: {
+        errors: Object,
+        index: {
+            type: Number,
+            required: true
+        },
+        phone: Object
+    },
+    data: function () {
+        return {
+            types: ['cellular', 'fax', 'home', 'main', 'pager', 'work', 'other']
+        }
+    },
+    computed: {
+        phoneNumberPlaceholder () {
+            return this.$gettext('Phone number')
+        }
+    }
+}
 </script>
