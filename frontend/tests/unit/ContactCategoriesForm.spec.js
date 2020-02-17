@@ -13,7 +13,7 @@ describe('ContactCategoriesForm.vue', () => {
     let store
 
     beforeEach(() => {
-        const actionsInjector = require('inject-loader!@/store/actions')
+        const actionsInjector = require('inject-loader!@/store/actions') // eslint-disable-line import/no-webpack-loader-syntax
         const actions = actionsInjector({
             '../api': {
                 updateContact (pk, data) {
