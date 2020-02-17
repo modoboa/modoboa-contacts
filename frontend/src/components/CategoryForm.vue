@@ -23,33 +23,33 @@
 </template>
 
 <script>
- export default {
-     data () {
-         return {
-             category: {},
-             formErrors: {}
-         }
-     },
-     computed: {
-         namePlaceholder () {
-             return this.$gettext('Name')
-         }
-     },
-     methods: {
-         close () {
-             this.show = false
-             this.category = {}
-             this.formErrors = {}
-             this.$emit('close')
-         },
-         createCategory () {
-             this.$store.dispatch('createCategory', this.category).then((res) => {
-                 this.close()
-             }, this.onFormError)
-         },
-         onFormError (response) {
-             this.formErrors = response.data
-         }
-     }
- }
+export default {
+    data () {
+        return {
+            category: {},
+            formErrors: {}
+        }
+    },
+    computed: {
+        namePlaceholder () {
+            return this.$gettext('Name')
+        }
+    },
+    methods: {
+        close () {
+            this.show = false
+            this.category = {}
+            this.formErrors = {}
+            this.$emit('close')
+        },
+        createCategory () {
+            this.$store.dispatch('createCategory', this.category).then((res) => {
+                this.close()
+            }, this.onFormError)
+        },
+        onFormError (response) {
+            this.formErrors = response.data
+        }
+    }
+}
 </script>

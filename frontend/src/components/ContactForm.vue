@@ -6,7 +6,7 @@
       <h3 v-else class="modal-title">
         <translate>New contact</translate></h3>
     </div>
-    
+
     <div slot="body">
       <form id="contactForm" class="form-horizontal" method="post" v-on:submit.prevent="saveContact" enctype="multipart/form-data">
         <div class="form-group" :class="{ 'has-error': formErrors['first_name'] || formErrors['last_name'] }">
@@ -117,146 +117,146 @@
 </template>
 
 <script>
- import * as api from '../api'
- import Datepicker from 'vuejs-datepicker'
- import EmailField from './EmailField.vue'
- import Modal from './Modal.vue'
- import PhoneNumberField from './PhoneNumberField.vue'
- 
- export default {
-     components: {
-         'datepicker': Datepicker,
-         'email-field': EmailField,
-         'modal': Modal,
-         'phone-number-field': PhoneNumberField
-     },
-     data () {
-         return {
-             contact: {
-                 emails: [{}],
-                 phone_numbers: [{}]
-             },
-             formErrors: {},
-             show: true,
-             showMore: false
-         }
-     },
-     computed: {
-         firstNamePlaceholder () {
-             return this.$gettext('First name')
-         },
-         lastNamePlaceholder () {
-             return this.$gettext('Last name')
-         },
-         displayNamePlaceholder () {
-             return this.$gettext('Display name')
-         },
-         companyPlaceholder () {
-             return this.$gettext('Company')
-         },
-         positionPlaceholder () {
-             return this.$gettext('Position')
-         },
-         birthDatePlaceholder () {
-             return this.$gettext('Birth date')
-         },
-         addressPlaceholder () {
-             return this.$gettext('Address')
-         },
-         zipCodePlaceholder () {
-             return this.$gettext('Zip Code')
-         },
-         cityPlaceholder () {
-             return this.$gettext('City')
-         },
-         countryPlaceholder () {
-             return this.$gettext('Country')
-         },
-         statePlaceholder () {
-             return this.$gettext('State/Province')
-         },
-         notePlaceholder () {
-             return this.$gettext('Note')
-         }
-     },
-     props: {
-         pk: {
-             type: Number,
-             default: null
-         }
-     },
-     created () {
-         if (this.pk) {
-             api.getContact(this.pk).then((res) => {
-                 this.contact = res.data
-                 if (this.contact.emails.length === 0) {
-                     this.contact.emails.push({})
-                 }
-                 if (this.contact.phone_numbers.length === 0) {
-                     this.contact.phone_numbers.push({})
-                 }
-                 if (this.contact.address !== '') {
-                     this.showMore = true
-                 }
-             })
-         }
-     },
-     methods: {
-         close () {
-             this.show = false
-             this.contact = {}
-             this.formErrors = {}
-             this.$emit('close')
-         },
-         onFormError (response) {
-             this.formErrors = response.data
-         },
-         createContact (contact) {
-             this.$store.dispatch('createContact', contact).then((res) => {
-                 this.close()
-             }, this.onFormError)
-         },
-         saveContact () {
-             var contact = JSON.parse(JSON.stringify(this.contact))
-             /* var form = document.querySelector('#contactForm')
+import * as api from '../api'
+import Datepicker from 'vuejs-datepicker'
+import EmailField from './EmailField.vue'
+import Modal from './Modal.vue'
+import PhoneNumberField from './PhoneNumberField.vue'
+
+export default {
+    components: {
+        datepicker: Datepicker,
+        'email-field': EmailField,
+        modal: Modal,
+        'phone-number-field': PhoneNumberField
+    },
+    data () {
+        return {
+            contact: {
+                emails: [{}],
+                phone_numbers: [{}]
+            },
+            formErrors: {},
+            show: true,
+            showMore: false
+        }
+    },
+    computed: {
+        firstNamePlaceholder () {
+            return this.$gettext('First name')
+        },
+        lastNamePlaceholder () {
+            return this.$gettext('Last name')
+        },
+        displayNamePlaceholder () {
+            return this.$gettext('Display name')
+        },
+        companyPlaceholder () {
+            return this.$gettext('Company')
+        },
+        positionPlaceholder () {
+            return this.$gettext('Position')
+        },
+        birthDatePlaceholder () {
+            return this.$gettext('Birth date')
+        },
+        addressPlaceholder () {
+            return this.$gettext('Address')
+        },
+        zipCodePlaceholder () {
+            return this.$gettext('Zip Code')
+        },
+        cityPlaceholder () {
+            return this.$gettext('City')
+        },
+        countryPlaceholder () {
+            return this.$gettext('Country')
+        },
+        statePlaceholder () {
+            return this.$gettext('State/Province')
+        },
+        notePlaceholder () {
+            return this.$gettext('Note')
+        }
+    },
+    props: {
+        pk: {
+            type: Number,
+            default: null
+        }
+    },
+    created () {
+        if (this.pk) {
+            api.getContact(this.pk).then((res) => {
+                this.contact = res.data
+                if (this.contact.emails.length === 0) {
+                    this.contact.emails.push({})
+                }
+                if (this.contact.phone_numbers.length === 0) {
+                    this.contact.phone_numbers.push({})
+                }
+                if (this.contact.address !== '') {
+                    this.showMore = true
+                }
+            })
+        }
+    },
+    methods: {
+        close () {
+            this.show = false
+            this.contact = {}
+            this.formErrors = {}
+            this.$emit('close')
+        },
+        onFormError (response) {
+            this.formErrors = response.data
+        },
+        createContact (contact) {
+            this.$store.dispatch('createContact', contact).then((res) => {
+                this.close()
+            }, this.onFormError)
+        },
+        saveContact () {
+            var contact = JSON.parse(JSON.stringify(this.contact))
+            /* var form = document.querySelector('#contactForm')
              var data = new FormData(form) */
 
-             if (!Object.keys(contact.phone_numbers[0]).length) {
-                 contact.phone_numbers.splice(0, 1)
-             }
-             if (contact.birth_date) {
-                 contact.birth_date = contact.birth_date.split('T')[0]
-             }
-             if (this.pk !== null) {
-                 this.updateContact(contact)
-             } else {
-                 this.createContact(contact)
-             }
-         },
-         addEmailField () {
-             this.contact.emails.push({})
-         },
-         deleteEmailField (index) {
-             this.contact.emails.splice(index, 1)
-         },
-         setEmail (index, email) {
-             this.contact.emails.splice(index, 1, email)
-         },
-         addPhoneNumberField () {
-             this.contact.phone_numbers.push({})
-         },
-         deletePhoneNumberField (index) {
-             this.contact.phone_numbers.splice(index, 1)
-         },
-         setPhoneNumber (index, phoneNumber) {
-             this.contact.phone_numbers.splice(index, 1, phoneNumber)
-         },
-         updateContact (contact) {
-             var args = [contact.pk, contact]
-             this.$store.dispatch('updateContact', args).then((res) => {
-                 this.close()
-             }, this.onFormError)
-         }
-     }
- }
+            if (!Object.keys(contact.phone_numbers[0]).length) {
+                contact.phone_numbers.splice(0, 1)
+            }
+            if (contact.birth_date) {
+                contact.birth_date = contact.birth_date.split('T')[0]
+            }
+            if (this.pk !== null) {
+                this.updateContact(contact)
+            } else {
+                this.createContact(contact)
+            }
+        },
+        addEmailField () {
+            this.contact.emails.push({})
+        },
+        deleteEmailField (index) {
+            this.contact.emails.splice(index, 1)
+        },
+        setEmail (index, email) {
+            this.contact.emails.splice(index, 1, email)
+        },
+        addPhoneNumberField () {
+            this.contact.phone_numbers.push({})
+        },
+        deletePhoneNumberField (index) {
+            this.contact.phone_numbers.splice(index, 1)
+        },
+        setPhoneNumber (index, phoneNumber) {
+            this.contact.phone_numbers.splice(index, 1, phoneNumber)
+        },
+        updateContact (contact) {
+            var args = [contact.pk, contact]
+            this.$store.dispatch('updateContact', args).then((res) => {
+                this.close()
+            }, this.onFormError)
+        }
+    }
+}
 </script>

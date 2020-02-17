@@ -24,29 +24,29 @@
 </template>
 
 <script>
- import { mapGetters } from 'vuex'
- import CategoryForm from './components/CategoryForm.vue'
+import { mapGetters } from 'vuex'
+import CategoryForm from './components/CategoryForm.vue'
 
- export default {
-     components: {
-         'category-form': CategoryForm
-     },
-     computed: mapGetters([
-         'categories'
-     ]),
-     created () {
-         this.$store.dispatch('getCategories')
-         this.$language.current = 'fr_FR'
-     },
-     data () {
-         return {
-             showCategoryForm: false
-         }
-     },
-     methods: {
-         closeCategoryForm () {
-             this.showCategoryForm = false
-         }
-     }
- }
+export default {
+    components: {
+        'category-form': CategoryForm
+    },
+    computed: mapGetters([
+        'categories'
+    ]),
+    created () {
+        this.$store.dispatch('getCategories')
+        this.$language.current = 'fr_FR'
+    },
+    data () {
+        return {
+            showCategoryForm: false
+        }
+    },
+    methods: {
+        closeCategoryForm () {
+            this.showCategoryForm = false
+        }
+    }
+}
 </script>
