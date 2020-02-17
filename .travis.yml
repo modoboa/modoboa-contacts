@@ -40,7 +40,7 @@ install:
   - npm install
 
 script:
-  - npm run unit
+  - npm run unit:test
   - cd ../test_project
   - coverage run --source ../modoboa_contacts manage.py test modoboa_contacts
 
