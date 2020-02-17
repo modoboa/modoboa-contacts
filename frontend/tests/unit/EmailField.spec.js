@@ -1,4 +1,5 @@
 import assert from 'assert'
+import { expect } from 'chai'
 
 import Vue from 'vue'
 
@@ -15,7 +16,7 @@ describe('EmailField.vue', () => {
         const Ctor = Vue.extend(EmailField)
         const vm = new Ctor({
             propsData: {
-                index: 0, errors: {}, email: {address: 'test@toto.com', type: 'home'}
+                index: 0, errors: {}, email: { address: 'test@toto.com', type: 'home' }
             }
         }).$mount()
         expect(vm.$el).to.be.ok

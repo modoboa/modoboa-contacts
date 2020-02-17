@@ -17,7 +17,7 @@
       </ul>
     </div>
     <div class="main">
-      <router-view></router-view>
+      <router-view/>
     </div>
     <category-form v-if="showCategoryForm" @close="closeCategoryForm"></category-form>
   </div>

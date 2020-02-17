@@ -7,7 +7,7 @@ export const deleteContact = ({ commit }, pk) => {
     })
 }
 
-export const updateContact = ({ commit }, [ pk, data ]) => {
+export const updateContact = ({ commit }, [pk, data]) => {
     return api.updateContact(pk, data).then(response => {
         commit(types.UPDATE_CONTACT, { contact: response.data })
     })

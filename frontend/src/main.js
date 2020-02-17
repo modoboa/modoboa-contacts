@@ -32,7 +32,7 @@ Vue.filter('translate', value => {
     return !value ? '' : Vue.prototype.$gettext(value.toString())
 })
 
-let csrftoken = Cookies.get('csrftoken')
+const csrftoken = Cookies.get('csrftoken')
 Vue.http.headers.common['X-CSRFTOKEN'] = csrftoken
 
 const routes = [
@@ -46,13 +46,14 @@ export var router = new VueRouter({
     linkActiveClass: 'active'
 })
 
+Vue.config.productionTip = false
+
 // eslint-disable-next-line no-new
 new Vue({
-    el: '#app',
     render: h => h(App),
     router,
     store
-})
+}).$mount('#app')
 
 /* global userLang */
 Vue.config.language = userLang

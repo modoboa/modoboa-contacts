@@ -19,13 +19,8 @@
   };
   </script>
   {% endif %}
-  {% if not debug %}
-    {% render_bundle 'manifest' 'js' 'CONTACTS' %}
-    {% render_bundle 'vendor' 'js' 'CONTACTS' %}
-    {% render_bundle 'app' 'js' 'CONTACTS' %}
-  {% else %}
-    {% render_bundle 'app' 'js' 'CONTACTS' %}
-  {% endif %}
+  {% render_bundle 'chunk-vendors' 'js' 'CONTACTS' %}
+  {% render_bundle 'app' 'js' 'CONTACTS' %}
 {% endblock %}
 
 {% block container_content %}

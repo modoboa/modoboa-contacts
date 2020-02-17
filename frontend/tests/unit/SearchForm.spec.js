@@ -1,3 +1,8 @@
+import chai from 'chai'
+import sinonChai from 'sinon-chai'
+import { expect } from 'chai'
+import sinon from 'sinon'
+
 import Vue from 'vue'
 
 import GetTextPlugin from 'vue-gettext'
@@ -8,7 +13,8 @@ import SearchForm from '@/components/SearchForm.vue'
 describe('SearchForm.vue', () => {
     beforeEach(function () {
         GetTextPlugin.installed = false
-        Vue.use(GetTextPlugin, {translations: translations})
+        chai.use(sinonChai)
+        Vue.use(GetTextPlugin, { translations: translations })
     })
 
     it('should render correct contents', () => {
@@ -20,7 +26,7 @@ describe('SearchForm.vue', () => {
     it('form submit should emit "search" event with query', () => {
         const Ctor = Vue.extend(SearchForm)
         const vm = new Ctor().$mount()
-        let spy = sinon.spy()
+        const spy = sinon.spy()
 
         vm.$on('search', spy)
         vm.query = 'Test'

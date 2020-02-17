@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import GetTextPlugin from 'vue-gettext'
 import translations from '@/translations.json'
 
+import { expect } from 'chai'
+
 import ContactCategoriesForm from '@/components/ContactCategoriesForm.vue'
 import categories from '@/store/modules/categories'
 import list from '@/store/modules/list'
@@ -18,8 +20,8 @@ describe('ContactCategoriesForm.vue', () => {
                     return Promise.resolve({
                         data: {
                             pk: 1,
-                            'first_name': 'Homer',
-                            'last_name': 'Simpson',
+                            first_name: 'Homer',
+                            last_name: 'Simpson',
                             emails: [{
                                 address: 'homer@simpson.com',
                                 type: 'home'
@@ -31,8 +33,8 @@ describe('ContactCategoriesForm.vue', () => {
             }
         })
         GetTextPlugin.installed = false
-        Vue.use(GetTextPlugin, {translations: translations})
-
+        Vue.use(GetTextPlugin, { translations: translations })
+        Vue.use(Vuex)
         store = new Vuex.Store({
             actions,
             modules: {
@@ -52,9 +54,9 @@ describe('ContactCategoriesForm.vue', () => {
                     mutations: list.mutations,
                     state: {
                         contacts: [{
-                            'pk': 1,
-                            'first_name': 'Homer',
-                            'last_name': 'Simpson',
+                            pk: 1,
+                            first_name: 'Homer',
+                            last_name: 'Simpson',
                             emails: [{
                                 address: 'homer@simpson.com',
                                 type: 'home'
@@ -90,4 +92,3 @@ describe('ContactCategoriesForm.vue', () => {
         }).catch(done)
     })
 })
-
