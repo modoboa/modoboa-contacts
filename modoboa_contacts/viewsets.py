@@ -72,7 +72,7 @@ class ContactViewSet(viewsets.ModelViewSet):
     filter_backends = [
         filters.SearchFilter,
         django_filters.rest_framework.DjangoFilterBackend]
-    filter_class = ContactFilter
+    filterset_class = ContactFilter
     permission_classes = [IsAuthenticated]
     search_fields = ("^first_name", "^last_name", "^emails__address")
     serializer_class = serializers.ContactSerializer
