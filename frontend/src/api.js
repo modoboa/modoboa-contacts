@@ -30,6 +30,14 @@ const getCategories = () => {
     return categoryResource.get()
 }
 
+const updateCategory = (pk, data) => {
+    return categoryResource.update({ pk: pk }, data)
+}
+
+const deleteCategory = (pk) => {
+    return categoryResource.delete({ pk: pk })
+}
+
 // contacts API
 const createContact = (data) => {
     return contactResource.save(data)
@@ -65,6 +73,8 @@ export {
 
     createCategory,
     getCategories,
+    updateCategory,
+    deleteCategory,
 
     createContact,
     deleteContact,

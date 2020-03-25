@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 import * as api from '../../api'
 import * as types from '../mutation-types'
 
@@ -23,6 +25,18 @@ const actions = {
         return api.getCategories().then(response => {
             commit(types.SET_CATEGORIES, { categories: response.data })
         })
+    },
+
+    updateCategory ({ commit }, data) {
+        return api.updateCategory(data.pk, data).then(response => {
+            commit(types.UPDATE_CATEGORY, { category: response.data })
+        })
+    },
+
+    deleteCategory ({ commit }, data) {
+        return api.deleteCategory(data.pk).then(response => {
+            commit(types.DELETE_CATEGORY, { pk: data.pk })
+        })
     }
 }
 
@@ -34,6 +48,20 @@ const mutations = {
 
     [types.SET_CATEGORIES] (state, { categories }) {
         state.categories = categories
+    },
+
+    [types.UPDATE_CATEGORY] (state, { category }) {
+        state.categories.filter(function (item, pos) {
+            if (item.pk === category.pk) {
+                Vue.set(state.categories, pos, category)
+            }
+        })
+    },
+
+    [types.DELETE_CATEGORY] (state, { pk }) {
+        state.categories = state.categories.filter(function (category) {
+            return category.pk !== pk
+        })
     }
 }
 
