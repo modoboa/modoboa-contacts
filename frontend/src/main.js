@@ -38,7 +38,7 @@ Vue.http.headers.common['X-CSRFTOKEN'] = csrftoken
 const routes = [
     { path: '/', name: 'contact-list', component: ContactList },
     { path: '/:pk(\\d+)', name: 'contact-detail', component: ContactDetail },
-    { path: '/:category(\\w+)', name: 'contact-list-filtered', component: ContactList }
+    { path: '/:category([\\w%]+)', name: 'contact-list-filtered', component: ContactList }
 ]
 
 export var router = new VueRouter({

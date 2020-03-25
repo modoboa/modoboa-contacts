@@ -10,3 +10,5 @@ export const SET_CONTACT = 'SET_CONTACT'
 // categories module mutations
 export const ADD_CATEGORY = 'ADD_CATEGORY'
 export const SET_CATEGORIES = 'SET_CATEGORIES'
+export const UPDATE_CATEGORY = 'UPDATE_CATEGORY'
+export const DELETE_CATEGORY = 'DELETE_CATEGORY'
