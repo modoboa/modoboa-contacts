@@ -4,174 +4,159 @@
 # Automatically generated, 2017.
 # 
 # Translators:
-# Antoine Nguyen <tonio@ngyn.org>, 2020
+# Irriep Nala Novram <allannkorh@yahoo.fr>, 2019
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: modoboa-contacts 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-06 14:15+0200\n"
+"POT-Creation-Date: 2018-10-12 11:07+0200\n"
 "PO-Revision-Date: 2018-01-30 10:28+0000\n"
-"Last-Translator: Antoine Nguyen <tonio@ngyn.org>, 2020\n"
-"Language-Team: French (https://www.transifex.com/tonio/teams/13749/fr/)\n"
+"Last-Translator: Irriep Nala Novram <allannkorh@yahoo.fr>, 2019\n"
+"Language-Team: Breton (https://www.transifex.com/tonio/teams/13749/br/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: br\n"
+"Plural-Forms: nplurals=5; plural=((n%10 == 1) && (n%100 != 11) && (n%100 !=71) && (n%100 !=91) ? 0 :(n%10 == 2) && (n%100 != 12) && (n%100 !=72) && (n%100 !=92) ? 1 :(n%10 ==3 || n%10==4 || n%10==9) && (n%100 < 10 || n% 100 > 19) && (n%100 < 70 || n%100 > 79) && (n%100 < 90 || n%100 > 99) ? 2 :(n != 0 && n % 1000000 == 0) ? 3 : 4);\n"
 
 #: src/components/ContactList.vue:8
 msgid "Add"
-msgstr "Ajouter"
+msgstr "Ouzhpennañ"
 
-#: src/App.vue:17 src/components/CategoryForm.vue:4
+#: src/App.vue:13 src/components/CategoryForm.vue:3
 msgid "Add category"
-msgstr "Ajouter une catégorie"
+msgstr "Ouzhpennañ ur rummad"
 
 #: src/components/ContactDetail.vue:50 src/components/ContactForm.vue:164
-#: src/components/EmailField.vue:40
+#: src/components/EmailField.vue:38
 msgid "Address"
-msgstr "Adresse"
+msgstr "Chomlec'h"
 
 #: src/components/AddressBookDetail.vue:3
 msgid "Address book information"
-msgstr "Information sur le carnet d'adresse"
+msgstr "Chomlec'h titouroù al levr"
 
 #: src/components/ContactCategoriesForm.vue:20
 msgid "Apply"
-msgstr "Appliquer"
+msgstr "Arloañ"
 
 #: src/components/ContactDetail.vue:22
 msgid "at"
-msgstr "chez"
+msgstr "da"
 
 #: src/components/ContactForm.vue:161
 msgid "Birth date"
-msgstr "Date de naissance"
+msgstr "Deiziad ganedigezh"
 
 #: src/App.vue:7 src/components/ContactCategoriesForm.vue:3
 msgid "Categories"
-msgstr "Catégories"
+msgstr "Rummadoù"
 
 #: src/components/ContactForm.vue:170
 msgid "City"
-msgstr "Ville"
+msgstr "Kêr"
 
-#: src/components/AddressBookDetail.vue:13 src/components/CategoryForm.vue:16
+#: src/components/AddressBookDetail.vue:13 src/components/CategoryForm.vue:15
 #: src/components/ContactCategoriesForm.vue:19
 #: src/components/ContactForm.vue:109
 msgid "Close"
-msgstr "Fermer"
+msgstr "Serriñ"
 
 #: src/components/ContactForm.vue:155
 msgid "Company"
-msgstr "Société"
+msgstr "Embregerezh"
 
 #: src/App.vue:5
 msgid "Contacts"
-msgstr "Contacts"
+msgstr "Darempredoù"
 
 #: src/components/ContactForm.vue:173
 msgid "Country"
-msgstr "Pays"
-
-#: src/App.vue:43
-msgid "Delete this category"
-msgstr "Supprimer cette catégorie"
-
-#: src/App.vue:64
-msgid "Delete this category?"
-msgstr "Supprimer cette catégorie ?"
+msgstr "Bro"
 
 #: src/components/ContactForm.vue:152 src/components/ContactList.vue:23
 msgid "Display name"
-msgstr "Nom complet"
-
-#: src/components/CategoryForm.vue:3
-msgid "Edit category"
-msgstr "Modifier la catégorie"
+msgstr "Diskouez an anv"
 
 #: src/components/ContactForm.vue:4
 msgid "Edit contact"
-msgstr "Editer le contact"
+msgstr "Aozañ an darempred"
 
 #: src/components/ContactList.vue:24
 msgid "Email"
-msgstr "E-mail"
+msgstr "Postel"
 
 #: src/components/ContactForm.vue:146
 msgid "First name"
-msgstr "Prénom"
+msgstr "Anv bihan"
 
 #: src/components/ContactForm.vue:149
 msgid "Last name"
-msgstr "Nom"
-
-#: src/App.vue:46
-msgid "Modify this category"
-msgstr "Modifier cette catégorie"
+msgstr "Anv familh"
 
 #: src/components/ContactForm.vue:107
 msgid "More"
-msgstr "Plus"
+msgstr "Muioc'h"
 
-#: src/components/CategoryForm.vue:42
+#: src/components/CategoryForm.vue:35
 msgid "Name"
-msgstr "Nom"
+msgstr "Anv"
 
 #: src/components/ContactForm.vue:6
 msgid "New contact"
-msgstr "Nouveau contact"
+msgstr "Darempred nevez"
 
 #: src/components/ContactDetail.vue:64 src/components/ContactForm.vue:179
 msgid "Note"
-msgstr "Note"
+msgstr "Notenn"
 
 #: src/components/ContactList.vue:25
 msgid "Phone"
-msgstr "Téléphone"
+msgstr "Pellgomz"
 
 #: src/components/PhoneNumberField.vue:38
 msgid "Phone number"
-msgstr "Numéro de téléphone"
+msgstr "Niverenn pellgomz"
 
 #: src/components/ContactForm.vue:158
 msgid "Position"
-msgstr "Fonction"
+msgstr "Lec'hiadur"
 
-#: src/components/CategoryForm.vue:17
+#: src/components/CategoryForm.vue:16
 msgid "Save"
-msgstr "Enregistrer"
+msgstr "Enrollañ"
 
 #: src/components/SearchForm.vue:23
 msgid "Search"
-msgstr "Chercher"
+msgstr "Klask"
 
 #: src/components/ContactForm.vue:176
 msgid "State/Province"
-msgstr "Etat/Région"
+msgstr "Stad/Proviñs"
 
 #: src/components/ContactDetail.vue:16
 msgid "Summary"
-msgstr "Résumé"
+msgstr "Berradenn"
 
 #: src/components/ContactList.vue:16
 msgid "Synchronize your address book"
-msgstr "Synchroniser votre carnet d'adresse"
+msgstr "Sinkronelaat ho levr chomlec'hioù"
 
 #: src/components/AddressBookDetail.vue:10
 msgid "The credentials are the same than the ones you use to access Modoboa."
 msgstr ""
-"Les identifiants sont les mêmes que ceux utilisés pour accéder à Modoboa."
+"An titouroù anaout a vez ar memes re hag ar re a implijit da dizhout "
+"Modoboa."
 
 #: src/components/AddressBookDetail.vue:6
 msgid ""
 "To access this address book from the outside (such as Mozilla Thunderbird or"
 " your smartphone), use the following URL:"
 msgstr ""
-"Pour accéder à ce carnet d'adresse depuis l'extérieur (comme Mozilla "
-"Thunderbird ou votre smartphone), utilisez l'URL suivante :"
+"Evit tizhoù al levr chomlec'hioù-mañ adalek an diavaez (evel da skouer "
+"Mozilla Thunderbird war ho poellgomzer), implijit an URL da-heul:"
 
 #: src/components/ContactForm.vue:167
 msgid "Zip Code"
-msgstr "Code postal"
+msgstr "Kod Zip"

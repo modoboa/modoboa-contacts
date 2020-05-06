@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: modoboa-contacts 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-12 11:07+0200\n"
-"PO-Revision-Date: 2018-01-30 11:27+0100\n"
+"POT-Creation-Date: 2020-05-06 14:15+0200\n"
+"PO-Revision-Date: 2020-05-06 14:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en\n"
@@ -21,12 +21,12 @@ msgstr ""
 msgid "Add"
 msgstr "Add"
 
-#: src/App.vue:13 src/components/CategoryForm.vue:3
+#: src/App.vue:17 src/components/CategoryForm.vue:4
 msgid "Add category"
 msgstr "Add category"
 
 #: src/components/ContactDetail.vue:50 src/components/ContactForm.vue:164
-#: src/components/EmailField.vue:38
+#: src/components/EmailField.vue:40
 msgid "Address"
 msgstr "Address"
 
@@ -54,7 +54,7 @@ msgstr "Categories"
 msgid "City"
 msgstr "City"
 
-#: src/components/AddressBookDetail.vue:13 src/components/CategoryForm.vue:15
+#: src/components/AddressBookDetail.vue:13 src/components/CategoryForm.vue:16
 #: src/components/ContactCategoriesForm.vue:19
 #: src/components/ContactForm.vue:109
 msgid "Close"
@@ -72,9 +72,21 @@ msgstr "Contacts"
 msgid "Country"
 msgstr "Country"
 
+#: src/App.vue:43
+msgid "Delete this category"
+msgstr "Delete this category"
+
+#: src/App.vue:64
+msgid "Delete this category?"
+msgstr "Delete this category?"
+
 #: src/components/ContactForm.vue:152 src/components/ContactList.vue:23
 msgid "Display name"
 msgstr "Display name"
+
+#: src/components/CategoryForm.vue:3
+msgid "Edit category"
+msgstr "Edit category"
 
 #: src/components/ContactForm.vue:4
 msgid "Edit contact"
@@ -92,11 +104,15 @@ msgstr "First name"
 msgid "Last name"
 msgstr "Last name"
 
+#: src/App.vue:46
+msgid "Modify this category"
+msgstr "Modify this category"
+
 #: src/components/ContactForm.vue:107
 msgid "More"
 msgstr "More"
 
-#: src/components/CategoryForm.vue:35
+#: src/components/CategoryForm.vue:42
 msgid "Name"
 msgstr "Name"
 
@@ -120,7 +136,7 @@ msgstr "Phone number"
 msgid "Position"
 msgstr "Position"
 
-#: src/components/CategoryForm.vue:16
+#: src/components/CategoryForm.vue:17
 msgid "Save"
 msgstr "Save"
 
