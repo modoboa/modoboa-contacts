@@ -11,7 +11,11 @@ https://packaging.python.org/en/latest/distributing.html
 import io
 from os import path
 
-from pip._internal.req import parse_requirements
+try:
+    from pip.req import parse_requirements
+except ImportError:
+    # pip >= 10
+    from pip._internal.req import parse_requirements
 
 from setuptools import setup, find_packages
 
@@ -21,7 +25,14 @@ def get_requirements(requirements_file):
     requirements = []
     if path.isfile(requirements_file):
         for req in parse_requirements(requirements_file, session="hack"):
-            requirements.append(req.requirement)
+            try:
+                if req.markers:
+                    requirements.append("%s;%s" % (req.req, req.markers))
+                else:
+                    requirements.append("%s" % req.req)
+            except AttributeError:
+                # pip >= 20.0.2
+                requirements.append(req.requirement)
     return requirements
 
 
@@ -43,7 +54,7 @@ if __name__ == "__main__":
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "Environment :: Web Environment",
-            "Framework :: Django :: 1.11",
+            "Framework :: Django :: 2.2",
             "Intended Audience :: System Administrators",
             "License :: OSI Approved :: MIT License",
             "Operating System :: OS Independent",
