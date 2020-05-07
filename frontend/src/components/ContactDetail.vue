@@ -28,14 +28,14 @@
               </tr>
               <tr v-if="contact.categories">
                 <td><span class="fa fa-tag"></span></td>
-                <td colspan="2"><span v-for="category in contact.categories" class="label label-success">{{ getCategory(category).name }}</span></td>
+                <td colspan="2"><span v-for="category in contact.categories" :key="`category-${category}`" class="label label-success">{{ getCategory(category).name }}</span></td>
               </tr>
-              <tr v-for="(email, index) in contact.emails">
+              <tr v-for="(email, index) in contact.emails" :key="`email-${index}`">
                 <td><span v-if="index === 0" class="fa fa-envelope"></span></td>
                 <td><a :href="'mailto:' + email.address">{{ email.address }}</a></td>
                 <td><span class="label label-info">{{ email.type }}</span></td>
               </tr>
-              <tr v-for="(phone, index) in contact.phone_numbers">
+              <tr v-for="(phone, index) in contact.phone_numbers" :key="`phone-${index}`">
                 <td><span v-if="index === 0" class="fa fa-phone"></span></td>
                 <td>{{ phone.number }}</td>
                 <td><span class="label label-info">{{ phone.type }}</span></td>
@@ -78,55 +78,54 @@
 </template>
 
 <script>
- import { mapGetters } from 'vuex'
- import ContactCategoriesForm from './ContactCategoriesForm.vue'
- import ContactForm from './ContactForm.vue'
+import { mapGetters } from 'vuex'
+import ContactCategoriesForm from './ContactCategoriesForm.vue'
+import ContactForm from './ContactForm.vue'
 
- export default {
-     components: {
-         'contact-categories-form': ContactCategoriesForm,
-         'contact-form': ContactForm
-     },
-     data () {
-         return {
-             showContactCategoriesForm: false,
-             showContactForm: false
-         }
-     },
-     computed: mapGetters([
-         'contact',
-         'categories'
-     ]),
-     created () {
-         this.$store.dispatch('getContact', this.$route.params.pk)
-     },
-     methods: {
-         closeContactForm () {
-             this.showContactForm = false
-         },
-         deleteContact (pk) {
-             this.$store.dispatch('deleteContact', pk).then((res) => {
-                 this.$router.push('/')
-             })
-         },
-         getContactIndex (pk) {
-             var result = null
-             this.$store.state.list.contacts.forEach((contact, index) => {
-                 if (contact.pk === pk) {
-                     result = index
-                     return
-                 }
-             })
-             return result
-         },
-         getCategory (pk) {
-             for (const category of this.categories) {
-                 if (category.pk === pk) {
-                     return category
-                 }
-             }
-             return null
-         }
-     }
- }
+export default {
+    components: {
+        'contact-categories-form': ContactCategoriesForm,
+        'contact-form': ContactForm
+    },
+    data () {
+        return {
+            showContactCategoriesForm: false,
+            showContactForm: false
+        }
+    },
+    computed: mapGetters([
+        'contact',
+        'categories'
+    ]),
+    created () {
+        this.$store.dispatch('getContact', this.$route.params.pk)
+    },
+    methods: {
+        closeContactForm () {
+            this.showContactForm = false
+        },
+        deleteContact (pk) {
+            this.$store.dispatch('deleteContact', pk).then((res) => {
+                this.$router.push('/')
+            })
+        },
+        getContactIndex (pk) {
+            var result = null
+            this.$store.state.list.contacts.forEach((contact, index) => {
+                if (contact.pk === pk) {
+                    result = index
+                }
+            })
+            return result
+        },
+        getCategory (pk) {
+            for (const category of this.categories) {
+                if (category.pk === pk) {
+                    return category
+                }
+            }
+            return null
+        }
+    }
+}
 </script>
