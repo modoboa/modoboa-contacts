@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
-    "electron": "^8.0.1",
+    "electron": "^8.2.4",
     "inject-loader": "^4.0.1",
     "js-cookie": "^2.2.1",
     "moment": "^2.24.0",
