@@ -21,6 +21,10 @@ cache:
 addons:
   postgresql: '9.6'
   mysql: '5.5'
+  apt:
+    packages:
+      - librrd-dev
+      - rrdtool
 
 services:
   - postgres
@@ -28,7 +32,7 @@ services:
 
 before_install:
   - pip install codecov
-  - pip install -e git+https://github.com/modoboa/modoboa.git#egg=modoboa
+  - pip install -e git+https://github.com/modoboa/modoboa.git@1.x#egg=modoboa
 
 install:
   - pip install -r requirements.txt
