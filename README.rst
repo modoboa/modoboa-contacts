@@ -40,7 +40,7 @@ Finally, run the following commands to setup the database tables::
   $ python manage.py collectstatic
   $ python manage.py load_initial_data
 
-For developpers
+For developers
 ---------------
 
 The frontend part of this plugin is developed with `VueJS 2 <https://vuejs.org/>`_ and
