@@ -174,10 +174,12 @@ class PyCardDAV(object):
         self._check_write_support()
         data = (
             Mkcol() + [
-                elements.dav.Prop() + [
-                    elements.dav.ResourceType() +
-                    elements.dav.Collection() +
-                    AddressBook()
+                 elements.dav.Set() + [
+                    elements.dav.Prop() + [
+                        elements.dav.ResourceType() +
+                        elements.dav.Collection() +
+                        AddressBook()
+                    ]
                 ]
             ]
         )
