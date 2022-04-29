@@ -1,7 +1,7 @@
 Address book plugin for Modoboa
 ===============================
 
-|travis| |codecov|
+|gha| |codecov|
 
 Installation
 ------------
@@ -56,8 +56,8 @@ To update dist files (the ones that will be distributed with the plugin), run::
 
   $ npm run build
 
-.. |travis| image:: https://travis-ci.org/modoboa/modoboa-contacts.svg?branch=master
-    :target: https://travis-ci.org/modoboa/modoboa-contacts
+.. |gha| image:: https://github.com/modoboa/modoboa-contacts/actions/workflows/plugin.yml/badge.svg
+   :target: https://github.com/modoboa/modoboa-contacts/actions/workflows/plugin.yml
 
 .. |codecov| image:: https://codecov.io/gh/modoboa/modoboa-contacts/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/modoboa/modoboa-contacts
