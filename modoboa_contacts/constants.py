@@ -13,7 +13,7 @@ PHONE_TYPES = (
     ("work", ugettext_lazy("Work")),
     ("other", ugettext_lazy("Other")),
     ("main", ugettext_lazy("Main")),
-    ("cellular", ugettext_lazy("Cellular")),
+    ("cell", ugettext_lazy("Cellular")),
     ("fax", ugettext_lazy("Fax")),
     ("pager", ugettext_lazy("Pager"))
 )

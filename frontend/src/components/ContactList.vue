@@ -84,7 +84,7 @@ export default {
         ])
     },
     created () {
-        this.getContacts(this.$route.params)
+        this.getContacts(undefined, this.$route.params.category)
         api.getDefaultAddressBook().then(response => {
             this.addressBook = response.data
         })
@@ -121,7 +121,7 @@ export default {
     },
     watch: {
         '$route' (to, from) {
-            this.getContacts(this.$route.params)
+            this.getContacts(undefined, this.$route.params.category)
         }
     }
 }
