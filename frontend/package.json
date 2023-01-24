@@ -44,6 +44,6 @@
     "sinon": "^8.1.1",
     "sinon-chai": "^3.4.0",
     "vue-template-compiler": "^2.6.11",
-    "webpack-bundle-tracker": "^0.4.3"
+    "webpack-bundle-tracker": "^1.8.0"
   }
 }
