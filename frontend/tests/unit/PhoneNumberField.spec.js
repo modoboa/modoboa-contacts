@@ -16,7 +16,7 @@ describe('PhoneNumberField.vue', () => {
         const Ctor = Vue.extend(PhoneNumberField)
         const vm = new Ctor({
             propsData: {
-                index: 0, errors: {}, phone: { number: '0123456789', type: 'cellular' }
+                index: 0, errors: {}, phone: { number: '0123456789', type: 'cell' }
             }
         }).$mount()
         expect(vm.$el).to.be.ok // eslint-disable-line no-unused-expressions

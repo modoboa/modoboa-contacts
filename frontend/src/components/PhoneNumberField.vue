@@ -30,7 +30,7 @@ export default {
     },
     data: function () {
         return {
-            types: ['cellular', 'fax', 'home', 'main', 'pager', 'work', 'other']
+            types: ['cell', 'fax', 'home', 'main', 'pager', 'work', 'other']
         }
     },
     computed: {
