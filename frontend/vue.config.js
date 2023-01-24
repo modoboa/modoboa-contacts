@@ -7,19 +7,25 @@ module.exports = {
               : 'http://localhost:8080/',
     outputDir: '../modoboa_contacts/static/',
     assetsDir: 'modoboa_contacts',
-    devServer: {
-        publicPath: 'http://localhost:8080/',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-            'Access-Control-Allow-Headers':
-            'X-Requested-With, content-type, Authorization',
-            'Access-Control-Allow-Credentials': 'true'
-        }
-    },
-    configureWebpack: config => {
-        config.plugins.push(new BundleTracker({
-            path: '../modoboa_contacts/static/modoboa_contacts/'
-        }));
+    chainWebpack: config => {
+        config
+            .plugin('BundleTracker')
+            .use(BundleTracker, [{
+                filename: path.join('../modoboa_contacts/static/modoboa_contacts/', 'webpack-stats.json')
+            }])
+
+        config.devServer
+            .public('http://localhost:8080')
+            .port(8080)
+            .hotOnly(true)
+            .watchOptions({poll: 1000})
+            .https(false)
+            .headers({
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+                'Access-Control-Allow-Headers':
+                'X-Requested-With, content-type, Authorization',
+                'Access-Control-Allow-Credentials': 'true'
+            })
     }
 }
