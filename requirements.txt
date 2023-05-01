@@ -1,4 +1,4 @@
-django-filter==22.1
+django-filter==23.2
 django-webpack-loader==1.8.1
 vobject
 caldav==1.1.3
