@@ -1,7 +1,7 @@
 """Declare and register the contacts extension."""
 
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 
 from modoboa.core.extensions import ModoExtension, exts_pool
 from modoboa.parameters import tools as param_tools
@@ -14,15 +14,15 @@ class Contacts(ModoExtension):
     """Plugin declaration."""
 
     name = "modoboa_contacts"
-    label = ugettext_lazy("Contacts")
+    label = gettext_lazy("Contacts")
     version = __version__
-    description = ugettext_lazy("Address book")
+    description = gettext_lazy("Address book")
     url = "contacts"
     topredirection_url = reverse_lazy("modoboa_contacts:index")
 
     def load(self):
         param_tools.registry.add(
-            "user", forms.UserSettings, ugettext_lazy("Contacts"))
+            "user", forms.UserSettings, gettext_lazy("Contacts"))
 
 
 exts_pool.register_extension(Contacts)

@@ -1,21 +1,21 @@
 """Contacts constants."""
 
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 
 EMAIL_TYPES = (
-    ("home", ugettext_lazy("Home")),
-    ("work", ugettext_lazy("Work")),
-    ("other", ugettext_lazy("Other"))
+    ("home", gettext_lazy("Home")),
+    ("work", gettext_lazy("Work")),
+    ("other", gettext_lazy("Other"))
 )
 
 PHONE_TYPES = (
-    ("home", ugettext_lazy("Home")),
-    ("work", ugettext_lazy("Work")),
-    ("other", ugettext_lazy("Other")),
-    ("main", ugettext_lazy("Main")),
-    ("cell", ugettext_lazy("Cellular")),
-    ("fax", ugettext_lazy("Fax")),
-    ("pager", ugettext_lazy("Pager"))
+    ("home", gettext_lazy("Home")),
+    ("work", gettext_lazy("Work")),
+    ("other", gettext_lazy("Other")),
+    ("main", gettext_lazy("Main")),
+    ("cell", gettext_lazy("Cellular")),
+    ("fax", gettext_lazy("Fax")),
+    ("pager", gettext_lazy("Pager"))
 )
 
 CDAV_TO_MODEL_FIELDS_MAP = {

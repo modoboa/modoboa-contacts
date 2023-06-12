@@ -7,7 +7,7 @@ from dateutil.parser import parse
 import vobject
 
 from django.db import models
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from modoboa.lib import exceptions as lib_exceptions
 from modoboa.parameters import tools as param_tools
