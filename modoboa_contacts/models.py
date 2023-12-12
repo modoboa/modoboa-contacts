@@ -58,7 +58,7 @@ class Contact(models.Model):
     company = models.CharField(max_length=100, blank=True)
     position = models.CharField(max_length=200, blank=True)
 
-    address = models.CharField(max_length=200, blank=True)
+    address = models.TextField(blank=True)
     zipcode = models.CharField(max_length=15, blank=True)
     city = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True)
@@ -70,7 +70,7 @@ class Contact(models.Model):
 
     def __init__(self, *args, **kwargs):
         """Set uid for new object."""
-        super(Contact, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if not self.pk:
             self.uid = "{}.vcf".format(uuid.uuid4())
 

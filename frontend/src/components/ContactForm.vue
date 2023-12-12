@@ -71,7 +71,7 @@
             <label class="col-sm-1 control-label" for="address">
               <span class="fa fa-map-marker"></span></label>
             <div class="col-sm-11">
-              <input v-model="contact.address" type="text" id="address" name="address" class="form-control" :placeholder="addressPlaceholder">
+              <textarea v-model="contact.address" id="address" name="address" class="form-control" :placeholder="addressPlaceholder"></textarea>
               <span v-if="formErrors['address']" class="help-block">{{ formErrors['address'][0] }}</span>
             </div>
           </div>
@@ -96,7 +96,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-1 control-label" for="address">
+            <label class="col-sm-1 control-label" for="note">
               <span class="fa fa-sticky-note"></span></label>
             <div class="col-sm-11">
               <textarea v-model="contact.note" id="note" name="note" class="form-control" :placeholder="notePlaceholder"></textarea>
