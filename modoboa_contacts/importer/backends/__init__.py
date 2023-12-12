@@ -1,4 +1,4 @@
-from modoboa_contacts import models
+from modoboa_contacts import models, tasks
 
 
 class ImporterBackend:
@@ -41,6 +41,18 @@ class ImporterBackend:
             )
         return contact
 
-    def proceed(self, rows: list):
+    def proceed(self, rows: list, carddav_password: str = None):
         for row in rows:
-            self.import_contact(row)
+            contact = self.import_contact(row)
+            if carddav_password:
+                # FIXME: refactor CDAV tasks to allow connection from
+                # credentials and not only request
+                clt = tasks.get_cdav_client(
+                    self.addressbook,
+                    self.addressbook.user.email,
+                    carddav_password,
+                    True
+                )
+                path, etag = clt.upload_new_card(contact.uid, contact.to_vcard())
+                contact.etag = etag
+                contact.save(update_fields=["etag"])

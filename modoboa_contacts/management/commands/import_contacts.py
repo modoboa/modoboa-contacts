@@ -17,6 +17,13 @@ class Command(BaseCommand):
             help="Delimiter used in CSV file"
         )
         parser.add_argument(
+            "--carddav-password", type=str, default=None,
+            help=(
+                "Password associated to email. If provided, imported "
+                "contacts will be synced to CardDAV servert too"
+            )
+        )
+        parser.add_argument(
             "email", type=str,
             help="Email address to import contacts for"
         )
@@ -35,7 +42,12 @@ class Command(BaseCommand):
                 "Address Book for email '%s' not found" % options["email"]
             )
         try:
-            import_csv_file(addressbook, options["file"], options["delimiter"])
+            import_csv_file(
+                addressbook,
+                options["file"],
+                options["delimiter"],
+                options.get("carddav_password")
+            )
         except RuntimeError as err:
             raise CommandError(err)
         self.stdout.write(

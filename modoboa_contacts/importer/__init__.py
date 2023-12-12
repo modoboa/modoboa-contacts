@@ -24,7 +24,10 @@ def detect_import_backend(fp, delimiter: str = ";"):
     raise RuntimeError("Failed to detect backend to use")
 
 
-def import_csv_file(addressbook, csv_filename: str, delimiter: str):
+def import_csv_file(addressbook,
+                    csv_filename: str,
+                    delimiter: str,
+                    carddav_password: str = None):
     with open(csv_filename) as fp:
         backend, rows = detect_import_backend(fp, delimiter)
-        backend(addressbook).proceed(rows)
+        backend(addressbook).proceed(rows, carddav_password)
