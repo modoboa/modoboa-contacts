@@ -1,9 +1,13 @@
 # coding: utf-8
 """Contacts backend tests."""
 
+import os
+
 import httmock
 
 from django import forms
+from django.core import management
+
 from django.urls import reverse
 from django.utils import timezone
 
@@ -36,7 +40,7 @@ class RadicaleParametersForm(param_forms.AdminParametersForm):
 param_tools.registry.add("global", RadicaleParametersForm, "Radicale")
 
 
-class TestDataMixin(object):
+class TestDataMixin:
     """Create some data."""
 
     @classmethod
@@ -342,3 +346,62 @@ class EmailAddressViewSetTestCase(TestDataMixin, ModoAPITestCase):
         response = self.client.get("{}?search=Simpson".format(url))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 3)
+
+
+class ImportTestCase(TestDataMixin, ModoTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.path = os.path.join(
+            os.path.abspath(os.path.dirname(__file__)),
+            "test_data/outlook_export.csv"
+        )
+        self.wrong_path = os.path.join(
+            os.path.abspath(os.path.dirname(__file__)),
+            "test_data/unknown_export.csv"
+        )
+
+    def test_import_wrong_addressbook(self):
+        with self.assertRaises(management.base.CommandError) as ctx:
+            management.call_command(
+                "import_contacts", "error@test.com", self.path)
+        self.assertEqual(str(ctx.exception),
+                         "Address Book for email 'error@test.com' not found")
+
+    def test_import_unknown_backend(self):
+        with self.assertRaises(management.base.CommandError) as ctx:
+            management.call_command(
+                "import_contacts", "user@test.com", self.wrong_path)
+        self.assertEqual(str(ctx.exception),
+                         "Failed to detect backend to use")
+
+    def test_import_from_outlook(self):
+        management.call_command(
+            "import_contacts", "user@test.com", self.path)
+        address = models.EmailAddress.objects.get(
+            address="toto@titi.com")
+        phone = models.PhoneNumber.objects.get(
+            number="12345678")
+        self.assertEqual(address.contact.first_name, "Toto Tata")
+        self.assertEqual(address.contact.addressbook.user.email, "user@test.com")
+        self.assertEqual(
+            address.contact.address,
+            "Street 1 Street 2"
+        )
+
+    def test_import_and_carddav_sync(self):
+        with httmock.HTTMock(mocks.options_mock, mocks.put_mock):
+            management.call_command(
+                "import_contacts", "user@test.com", self.path,
+                carddav_password="Toto1234"
+            )
+        address = models.EmailAddress.objects.get(
+            address="toto@titi.com")
+        phone = models.PhoneNumber.objects.get(
+            number="12345678")
+        self.assertEqual(address.contact.first_name, "Toto Tata")
+        self.assertEqual(address.contact.addressbook.user.email, "user@test.com")
+        self.assertEqual(
+            address.contact.address,
+            "Street 1 Street 2"
+        )

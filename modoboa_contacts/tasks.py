@@ -8,12 +8,23 @@ from .lib import carddav
 from . import models
 
 
-def get_cdav_client(request, addressbook, write_support=False):
+def get_cdav_client(addressbook, user: str, passwd: str, write_support=False):
     """Instantiate a new CardDAV client."""
     return carddav.PyCardDAV(
-        addressbook.url, user=request.user.username,
-        passwd=cryptutils.decrypt(request.session["password"]),
+        addressbook.url,
+        user=user,
+        passwd=passwd,
         write_support=write_support
+    )
+
+
+def get_cdav_client_from_request(request, addressbook, *args, **kwargs):
+    """Create a connection from a Request object."""
+    return get_cdav_client(
+        addressbook,
+        request.user.username,
+        passwd=cryptutils.decrypt(request.session["password"]),
+        **kwargs
     )
 
 
@@ -32,7 +43,7 @@ def push_addressbook_to_carddav(request, addressbook):
 
     Use only once.
     """
-    clt = get_cdav_client(request, addressbook, True)
+    clt = get_cdav_client_from_request(request, addressbook, write_support=True)
     for contact in addressbook.contact_set.all():
         href, etag = clt.upload_new_card(contact.uid, contact.to_vcard())
         contact.etag = etag
@@ -44,7 +55,7 @@ def push_addressbook_to_carddav(request, addressbook):
 
 def sync_addressbook_from_cdav(request, addressbook):
     """Fetch changes from CardDAV server."""
-    clt = get_cdav_client(request, addressbook)
+    clt = get_cdav_client_from_request(request, addressbook)
     changes = clt.sync_vcards(addressbook.sync_token)
     if not len(changes["cards"]):
         return
@@ -71,7 +82,7 @@ def sync_addressbook_from_cdav(request, addressbook):
 
 def push_contact_to_cdav(request, contact):
     """Upload new contact to cdav collection."""
-    clt = get_cdav_client(request, contact.addressbook, True)
+    clt = get_cdav_client_from_request(request, contact.addressbook, write_support=True)
     path, etag = clt.upload_new_card(contact.uid, contact.to_vcard())
     contact.etag = etag
     contact.save(update_fields=["etag"])
@@ -79,7 +90,7 @@ def push_contact_to_cdav(request, contact):
 
 def update_contact_cdav(request, contact):
     """Update existing contact."""
-    clt = get_cdav_client(request, contact.addressbook, True)
+    clt = get_cdav_client_from_request(request, contact.addressbook, write_support=True)
     uid = contact.uid
     if not uid.endswith(".vcf"):
         uid += ".vcf"
@@ -90,7 +101,7 @@ def update_contact_cdav(request, contact):
 
 def delete_contact_cdav(request, contact):
     """Delete a contact."""
-    clt = get_cdav_client(request, contact.addressbook, True)
+    clt = get_cdav_client_from_request(request, contact.addressbook, write_support=True)
     uid = contact.uid
     if not uid.endswith(".vcf"):
         uid += ".vcf"
