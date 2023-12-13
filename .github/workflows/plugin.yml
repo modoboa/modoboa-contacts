@@ -137,7 +137,7 @@ jobs:
         shell: bash -l {0}
         run: |
           cd frontend
-          nvm install 10.15
+          nvm install 14
           npm install
           npm run build
           cd ..
