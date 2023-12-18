@@ -32,7 +32,7 @@ class OutlookBackend(ImporterBackend):
 
     @classmethod
     def detect_from_columns(cls, columns):
-        return columns == OUTLOOK_COLUMNS
+        return set(OUTLOOK_COLUMNS).issubset(columns)
 
     def get_first_name(self, values: dict) -> str:
         result = values["First Name"]

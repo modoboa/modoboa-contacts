@@ -24,6 +24,13 @@ class Command(BaseCommand):
             )
         )
         parser.add_argument(
+            "--backend", type=str, default="auto",
+            help=(
+                "Specify import backend to use. Defaults to 'auto', "
+                "meaning the script will try to guess which one to use"
+            )
+        )
+        parser.add_argument(
             "email", type=str,
             help="Email address to import contacts for"
         )
@@ -44,6 +51,7 @@ class Command(BaseCommand):
         try:
             import_csv_file(
                 addressbook,
+                options["backend"],
                 options["file"],
                 options["delimiter"],
                 options.get("carddav_password")
