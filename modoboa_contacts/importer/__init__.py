@@ -33,7 +33,6 @@ def import_csv_file(addressbook,
                     delimiter: str,
                     carddav_password: str = None):
     with open(csv_filename) as fp:
-        if backend_name == "auto":
-            backend, rows = get_import_backend(
-                fp, delimiter, backend_name)
+        backend, rows = get_import_backend(
+            fp, delimiter, backend_name)
         backend(addressbook).proceed(rows, carddav_password)
