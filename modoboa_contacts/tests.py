@@ -375,9 +375,25 @@ class ImportTestCase(TestDataMixin, ModoTestCase):
         self.assertEqual(str(ctx.exception),
                          "Failed to detect backend to use")
 
-    def test_import_from_outlook(self):
+    def test_import_from_outlook_auto(self):
         management.call_command(
             "import_contacts", "user@test.com", self.path)
+        address = models.EmailAddress.objects.get(
+            address="toto@titi.com")
+        phone = models.PhoneNumber.objects.get(
+            number="12345678")
+        self.assertEqual(address.contact.first_name, "Toto Tata")
+        self.assertEqual(address.contact.addressbook.user.email, "user@test.com")
+        self.assertEqual(
+            address.contact.address,
+            "Street 1 Street 2"
+        )
+
+    def test_import_from_outlook(self):
+        management.call_command(
+            "import_contacts", backend="outlook",
+            "user@test.com", self.path
+        )
         address = models.EmailAddress.objects.get(
             address="toto@titi.com")
         phone = models.PhoneNumber.objects.get(
