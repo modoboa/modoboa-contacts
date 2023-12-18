@@ -391,8 +391,10 @@ class ImportTestCase(TestDataMixin, ModoTestCase):
 
     def test_import_from_outlook(self):
         management.call_command(
-            "import_contacts", backend="outlook",
-            "user@test.com", self.path
+            "import_contacts",
+            "user@test.com",
+            self.path,
+            backend="outlook",
         )
         address = models.EmailAddress.objects.get(
             address="toto@titi.com")
