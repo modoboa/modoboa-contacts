@@ -3,8 +3,14 @@ name: Modoboa contacts plugin
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - 'modoboa_contacts/**.po'
+      - 'frontend/**'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - 'modoboa_contacts/**.po'
+      - 'frontend/**'
   release:
     branches: [ master ]
     types: [ published ]
@@ -28,15 +34,15 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       mysql:
-        image: mysql:8.0
+        image: mariadb:11
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_USER: modoboa
-          MYSQL_PASSWORD: modoboa
-          MYSQL_DATABASE: modoboa
+          MARIA_ROOT_PASSWORD: root
+          MARIA_USER: modoboa
+          MARIA_PASSWORD: modoboa
+          MARIA_DATABASE: modoboa
         ports:
           - 3306/tcp
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     strategy:
       matrix:
@@ -45,9 +51,9 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -111,13 +117,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download coverage results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: coverage-results
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
 
@@ -125,14 +131,16 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: coverage
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
       - name: Build frontend
         shell: bash -l {0}
         run: |
@@ -152,16 +160,12 @@ jobs:
           python setup.py sdist bdist_wheel
       - name: Publish to Test PyPI
         if: endsWith(github.event.ref, '/master')
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
-          password: ${{ secrets.test_pypi_password }}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
       - name: Publish distribution to PyPI
         if: startsWith(github.event.ref, 'refs/tags') || github.event_name == 'release'
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
-          skip_existing: true
+          skip-existing: true
