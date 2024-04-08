@@ -36,10 +36,10 @@ jobs:
       mysql:
         image: mariadb:11
         env:
-          MARIA_ROOT_PASSWORD: root
-          MARIA_USER: modoboa
-          MARIA_PASSWORD: modoboa
-          MARIA_DATABASE: modoboa
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_USER: modoboa
+          MARIADB_PASSWORD: modoboa
+          MARIADB_DATABASE: modoboa
         ports:
           - 3306/tcp
         options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=3
