@@ -80,7 +80,7 @@ jobs:
           pip install 'mysqlclient<2.1.1'
           echo "DB=mysql" >> $GITHUB_ENV
       - name: Test with pytest
-        if: ${{ matrix.python-version != '3.10' || matrix.database != 'postgres' }}
+        if: ${{ matrix.python-version != '3.11' || matrix.database != 'postgres' }}
         run: |
           cd test_project
           python3 manage.py test modoboa_contacts
@@ -93,7 +93,7 @@ jobs:
           MYSQL_USER: root
 
       - name: Test with pytest and coverage
-        if: ${{ matrix.python-version == '3.10' && matrix.database == 'postgres' }}
+        if: ${{ matrix.python-version == '3.11' && matrix.database == 'postgres' }}
         run: |
           cd test_project
           coverage run --source ../modoboa_contacts manage.py test modoboa_contacts
@@ -107,8 +107,8 @@ jobs:
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }} # get randomly assigned published port
           MYSQL_USER: root
       - name: Upload coverage result
-        if: ${{ matrix.python-version == '3.10' }}
-        uses: actions/upload-artifact@v3
+        if: ${{ matrix.python-version == '3.11' && matrix.database == 'postgres' }}
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-results
           path: test_project/coverage.xml
@@ -133,6 +133,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/modoboa-contacts
     steps:
       - uses: actions/checkout@v4
         with:
