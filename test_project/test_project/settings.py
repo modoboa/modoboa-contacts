@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-from __future__ import unicode_literals
-
 from logging.handlers import SysLogHandler
 import os
 
@@ -56,6 +54,8 @@ INSTALLED_APPS = (
     'reversion',
     'ckeditor',
     'ckeditor_uploader',
+    'oauth2_provider',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'django_otp',
@@ -86,6 +86,7 @@ AUTH_USER_MODEL = 'core.User'
 MIDDLEWARE = (
     'x_forwarded_for.middleware.XForwardedForMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
