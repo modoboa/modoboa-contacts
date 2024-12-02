@@ -161,11 +161,11 @@ jobs:
           cd ..
           git clone https://github.com/modoboa/modoboa.git
           cd modoboa
-          python setup.py develop
+          pip install -e .
           cd ../modoboa-contacts/modoboa_contacts
           django-admin compilemessages
           cd ..
-          python setup.py sdist bdist_wheel
+          python -m build
       - name: Publish to Test PyPI
         if: endsWith(github.event.ref, '/master')
         uses: pypa/gh-action-pypi-publish@release/v1
