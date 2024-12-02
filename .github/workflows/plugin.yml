@@ -65,9 +65,9 @@ jobs:
           cd ..
           git clone https://github.com/modoboa/modoboa.git
           cd modoboa
-          python setup.py develop
+          pip install -e .
           cd ../modoboa-contacts
-          python setup.py develop
+          pip install -e .
       - name: Install postgres requirements
         if: ${{ matrix.database == 'postgres' }}
         run: |
